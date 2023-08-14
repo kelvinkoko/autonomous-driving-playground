@@ -1,5 +1,5 @@
 import * as CANNON from "cannon-es";
-import { addVisual } from "./Utils/Visual";
+import InfiniteGridHelper from "./Utils/InfiniteGridHelper";
 
 export const groundMaterial = new CANNON.Material("ground");
 
@@ -10,5 +10,6 @@ export function createGround(world: CANNON.World, scene: THREE.Scene) {
   groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0); // make it face up
 
   world.addBody(groundBody);
-  addVisual(groundBody, scene);
+  const grid = new InfiniteGridHelper(1, 10);
+  scene.add(grid);
 }
