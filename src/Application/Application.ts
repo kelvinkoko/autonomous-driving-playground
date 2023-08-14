@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createVehicle } from "./Car";
 import { createGround } from "./Ground";
+import { createSky } from "./Sky";
 import { updateVisual } from "./Utils/Visual";
 
 const scene = new THREE.Scene();
@@ -14,6 +15,7 @@ const world = new CANNON.World({
 });
 
 export function start() {
+  createSky(scene);
   createGround(world, scene);
   createVehicle(world, scene);
 
@@ -40,13 +42,15 @@ function setupCamera() {
     0.1,
     1000
   );
-  camera.position.z = 5;
+  camera.position.set(10, 3, 10);
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
   return camera;
 }
 
 function setupRenderer() {
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
   document.body.appendChild(renderer.domElement);
   return renderer;
 }
