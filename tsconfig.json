@@ -10,5 +10,5 @@
     "target": "es6",
     "allowJs": true
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "./types"]
 }

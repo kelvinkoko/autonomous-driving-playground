@@ -31,6 +31,14 @@ const config = {
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
+      },
+      {
+        test: /\.(glb|gltf)$/,
+        type: "asset/resource"
+      },
+      {
+        test: /\.hdr$/,
+        type: "asset/resource"
       }
     ]
   },
