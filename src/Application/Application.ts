@@ -5,6 +5,7 @@ import { createVehicle } from "./Car";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
 import { updateVisual } from "./Utils/Visual";
+import { createEnvironment } from "./World/Environment";
 
 const scene = new THREE.Scene();
 const camera = setupCamera();
@@ -15,6 +16,7 @@ const world = new CANNON.World({
 });
 
 export function start() {
+  createEnvironment(scene, renderer);
   createSky(scene);
   createGround(world, scene);
   createVehicle(world, scene);
@@ -36,20 +38,18 @@ function updatePhysics() {
 }
 
 function setupCamera() {
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-  camera.position.set(10, 3, 10);
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+  camera.position.set(5, 1, 0);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   return camera;
 }
 
 function setupRenderer() {
-  const renderer = new THREE.WebGLRenderer();
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   document.body.appendChild(renderer.domElement);
   return renderer;
