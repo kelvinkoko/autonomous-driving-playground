@@ -1,87 +1,79 @@
 import * as CANNON from "cannon-es";
+import chassisModelFile from "./Assets/Models/chassis.gltf";
+import wheelModelFile from "./Assets/Models/wheel.glb";
+
+import * as THREE from "three";
 import { groundMaterial } from "./Ground";
-import { addVisual } from "./Utils/Visual";
+import { loadModel } from "./Utils/Loader";
+import { addVisual, pushVisual } from "./Utils/Visual";
 
-export function createVehicle(world: CANNON.World, scene: THREE.Scene) {
-  const chassisBody = setupChassis(scene);
+const WEIGHT = 1611;
+const LENGTH = 4.694;
+const WHEEL_RADIUS = 0.3353;
+const overhang_offset = 0.06; // this is just adjust visually
+const OVERHANG_FRONT = 0.841 - overhang_offset;
+const OVERHANG_REAR = 0.978 + overhang_offset;
+const TRACK = 1.58;
+const GROUND_CLEARANCE = 0.14;
 
-  const vehicle = new CANNON.RaycastVehicle({
-    chassisBody
-  });
+export async function createVehicle(world: CANNON.World, scene: THREE.Scene) {
+  const chassisModel = await loadModel(chassisModelFile);
+  const wheelModel = await loadModel(wheelModelFile);
 
-  setupWheels(vehicle, world, scene);
+  const vehicle = setupChassis(chassisModel, scene);
+  setupWheels(vehicle, world, scene, wheelModel);
 
   vehicle.addToWorld(world);
-
   bindKeyEvent(vehicle);
 }
 
-function setupChassis(scene: THREE.Scene) {
-  const chassisShape = new CANNON.Box(new CANNON.Vec3(2, 0.5, 1));
-  const chassisBody = new CANNON.Body({ mass: 150 });
+function setupChassis(
+  chassisModel: THREE.Group,
+  scene: THREE.Scene
+): CANNON.RaycastVehicle {
+  let chassisBoxSize = getBoundingBoxSize(chassisModel);
+  const scale = LENGTH / chassisBoxSize.x;
+  chassisModel.scale.set(scale, scale, scale);
+  chassisBoxSize = getBoundingBoxSize(chassisModel);
+  const chassisShape = new CANNON.Box(
+    new CANNON.Vec3(
+      chassisBoxSize.x / 2,
+      chassisBoxSize.y / 2 - GROUND_CLEARANCE / 2,
+      chassisBoxSize.z / 2
+    )
+  );
+  const chassisBody = new CANNON.Body({ mass: WEIGHT });
   chassisBody.addShape(chassisShape);
   chassisBody.position.set(0, 4, 0);
   chassisBody.quaternion.setFromEuler(0, -Math.PI / 2, 0);
   addVisual(chassisBody, scene);
-  return chassisBody;
+  pushVisual(chassisBody, chassisModel, scene);
+  const vehicle = new CANNON.RaycastVehicle({
+    chassisBody
+  });
+  return vehicle;
 }
 
 function setupWheels(
   vehicle: CANNON.RaycastVehicle,
   world: CANNON.World,
-  scene: THREE.Scene
+  scene: THREE.Scene,
+  wheelModel: THREE.Group
 ) {
-  const wheelOptions = {
-    radius: 0.5,
-    directionLocal: new CANNON.Vec3(0, -1, 0),
-    suspensionStiffness: 30,
-    suspensionRestLength: 0.3,
-    frictionSlip: 1.4,
-    dampingRelaxation: 2.3,
-    dampingCompression: 4.4,
-    maxSuspensionForce: 100000,
-    rollInfluence: 0.01,
-    axleLocal: new CANNON.Vec3(0, 0, 1),
-    chassisConnectionPointLocal: new CANNON.Vec3(-1, 0, 1),
-    maxSuspensionTravel: 0.3,
-    customSlidingRotationalSpeed: -30,
-    useCustomSlidingRotationalSpeed: true
-  };
+  setupWheelsInfo(vehicle);
 
-  wheelOptions.chassisConnectionPointLocal.set(-1, 0, 1);
-  vehicle.addWheel(wheelOptions);
-
-  wheelOptions.chassisConnectionPointLocal.set(-1, 0, -1);
-  vehicle.addWheel(wheelOptions);
-
-  wheelOptions.chassisConnectionPointLocal.set(1, 0, 1);
-  vehicle.addWheel(wheelOptions);
-
-  wheelOptions.chassisConnectionPointLocal.set(1, 0, -1);
-  vehicle.addWheel(wheelOptions);
-
-  // Add the wheel bodies
-  const wheelBodies: CANNON.Body[] = [];
   const wheelMaterial = new CANNON.Material("wheel");
-  vehicle.wheelInfos.forEach(wheel => {
-    const cylinderShape = new CANNON.Cylinder(
-      wheel.radius,
-      wheel.radius,
-      wheel.radius / 2,
-      20
-    );
-    const wheelBody = new CANNON.Body({
-      mass: 0,
-      material: wheelMaterial
-    });
-    wheelBody.type = CANNON.Body.KINEMATIC;
-    wheelBody.collisionFilterGroup = 0; // turn off collisions
-    const quaternion = new CANNON.Quaternion().setFromEuler(-Math.PI / 2, 0, 0);
-    wheelBody.addShape(cylinderShape, new CANNON.Vec3(), quaternion);
+  const wheelBodies: CANNON.Body[] = [];
+  for (let i = 0; i < 4; i++) {
+    const wheelInfo = vehicle.wheelInfos[i];
+    const wheelBody = createWheelBody(i, wheelInfo, wheelMaterial);
     wheelBodies.push(wheelBody);
     addVisual(wheelBody, scene);
     world.addBody(wheelBody);
-  });
+
+    const clonedWheelModel = cloneWheelModel(i, wheelInfo, wheelModel);
+    pushVisual(wheelBody, clonedWheelModel, scene);
+  }
 
   const wheelGround = new CANNON.ContactMaterial(
     wheelMaterial,
@@ -104,16 +96,110 @@ function setupWheels(
       wheelBody.quaternion.copy(transform.quaternion);
     }
   });
+}
 
-  return wheelBodies;
+function setupWheelsInfo(vehicle: CANNON.RaycastVehicle) {
+  const vehicleBody = vehicle.chassisBody;
+  const OVERALL_HEIGHT =
+    vehicleBody.aabb.upperBound.y - vehicleBody.aabb.lowerBound.y;
+  const CHASSIS_HEIGHT = OVERALL_HEIGHT - GROUND_CLEARANCE;
+  const wheelOptions = {
+    radius: WHEEL_RADIUS,
+    directionLocal: new CANNON.Vec3(0, -1, 0),
+    suspensionStiffness: 30,
+    // Cannot find from spec, assume it contribute half clearance
+    suspensionRestLength: GROUND_CLEARANCE,
+    frictionSlip: 1.4,
+    dampingRelaxation: 2.3,
+    dampingCompression: 4.4,
+    maxSuspensionForce: 100000,
+    rollInfluence: 0.01,
+    axleLocal: new CANNON.Vec3(0, 0, 1),
+    chassisConnectionPointLocal: new CANNON.Vec3(-1, 0, 1),
+    maxSuspensionTravel: 0.3,
+    customSlidingRotationalSpeed: -30,
+    useCustomSlidingRotationalSpeed: true
+  };
+  const xFrontPosition = LENGTH / 2 - OVERHANG_FRONT;
+  const xRearPosition = LENGTH / 2 - OVERHANG_REAR;
+  const yOffset = -(OVERALL_HEIGHT / 2 - WHEEL_RADIUS + GROUND_CLEARANCE);
+  const zOffset = TRACK / 2;
+
+  wheelOptions.chassisConnectionPointLocal.set(
+    -xFrontPosition,
+    yOffset,
+    zOffset
+  );
+  vehicle.addWheel(wheelOptions);
+
+  wheelOptions.chassisConnectionPointLocal.set(
+    -xFrontPosition,
+    yOffset,
+    -zOffset
+  );
+  vehicle.addWheel(wheelOptions);
+
+  wheelOptions.chassisConnectionPointLocal.set(xRearPosition, yOffset, zOffset);
+  vehicle.addWheel(wheelOptions);
+
+  wheelOptions.chassisConnectionPointLocal.set(
+    xRearPosition,
+    yOffset,
+    -zOffset
+  );
+  vehicle.addWheel(wheelOptions);
+}
+
+function createWheelBody(
+  i: number,
+  wheel: CANNON.WheelInfo,
+  wheelMaterial: CANNON.Material
+): CANNON.Body {
+  const cylinderShape = new CANNON.Cylinder(
+    wheel.radius,
+    wheel.radius,
+    0.235,
+    20
+  );
+  const wheelBody = new CANNON.Body({
+    mass: 0,
+    material: wheelMaterial
+  });
+  wheelBody.type = CANNON.Body.KINEMATIC;
+  wheelBody.collisionFilterGroup = 0; // turn off collisions
+  const quaternion = new CANNON.Quaternion().setFromEuler(-Math.PI / 2, 0, 0);
+  wheelBody.addShape(cylinderShape, new CANNON.Vec3(), quaternion);
+  return wheelBody;
+}
+
+function cloneWheelModel(
+  i: number,
+  wheel: CANNON.WheelInfo,
+  glthWheelModel: THREE.Group
+): THREE.Group {
+  const clonedModel = glthWheelModel.clone();
+  const boxSize = getBoundingBoxSize(clonedModel);
+  const wheelScale = wheel.radius / (boxSize.x / 2);
+  if (i === 1 || i === 3) {
+    clonedModel.scale.set(-wheelScale, wheelScale, -wheelScale);
+  } else {
+    clonedModel.scale.set(wheelScale, wheelScale, wheelScale);
+  }
+  return clonedModel;
+}
+
+function getBoundingBoxSize(model: THREE.Group): THREE.Vector3 {
+  const box = new THREE.Box3().setFromObject(model);
+  return box.getSize(new THREE.Vector3());
 }
 
 function bindKeyEvent(vehicle: CANNON.RaycastVehicle) {
   // Add force on keydown
   document.addEventListener("keydown", event => {
     const maxSteerVal = 0.5;
-    const maxForce = 1000;
-    const brakeForce = 1000000;
+    const maxForce = 1331;
+    const frontBrakeForce = 100;
+    const rearBrakeForce = 100;
 
     switch (event.key) {
       case "w":
@@ -141,10 +227,10 @@ function bindKeyEvent(vehicle: CANNON.RaycastVehicle) {
         break;
 
       case "b":
-        vehicle.setBrake(brakeForce, 0);
-        vehicle.setBrake(brakeForce, 1);
-        vehicle.setBrake(brakeForce, 2);
-        vehicle.setBrake(brakeForce, 3);
+        vehicle.setBrake(frontBrakeForce, 0);
+        vehicle.setBrake(frontBrakeForce, 1);
+        vehicle.setBrake(rearBrakeForce, 2);
+        vehicle.setBrake(rearBrakeForce, 3);
         break;
     }
   });

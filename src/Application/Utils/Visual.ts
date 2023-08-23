@@ -5,6 +5,16 @@ import { setPosition, setQuaternion } from "./Conversion";
 const visuals: THREE.Group[] = [];
 const bodies: CANNON.Body[] = [];
 
+export function pushVisual(
+  body: CANNON.Body,
+  visual: THREE.Group,
+  scene: THREE.Scene
+) {
+  scene.add(visual);
+  bodies.push(body);
+  visuals.push(visual);
+}
+
 export function updateVisual() {
   visuals.forEach((visual, i) => {
     setPosition(visual, bodies[i].position);
