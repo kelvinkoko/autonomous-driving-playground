@@ -9,18 +9,21 @@ import { addVisual, pushVisual } from "./Utils/Visual";
 
 const WEIGHT = 1611;
 const LENGTH = 4.694;
+const WIDTH = 2.088;
+const OVERALL_HEIGHT = 1.445;
+const GROUND_CLEARANCE = 0.14;
+const CHASSIS_HEIGHT = OVERALL_HEIGHT - GROUND_CLEARANCE;
 const WHEEL_RADIUS = 0.3353;
 const overhang_offset = 0.06; // this is just adjust visually
 const OVERHANG_FRONT = 0.841 - overhang_offset;
 const OVERHANG_REAR = 0.978 + overhang_offset;
 const TRACK = 1.58;
-const GROUND_CLEARANCE = 0.14;
 
 export async function createVehicle(world: CANNON.World, scene: THREE.Scene) {
   const chassisModel = await loadModel(chassisModelFile);
   const wheelModel = await loadModel(wheelModelFile);
 
-  const vehicle = setupChassis(chassisModel, scene);
+  const vehicle = setupChassis(scene, chassisModel);
   setupWheels(vehicle, world, scene, wheelModel);
 
   vehicle.addToWorld(world);
@@ -28,13 +31,10 @@ export async function createVehicle(world: CANNON.World, scene: THREE.Scene) {
 }
 
 function setupChassis(
-  chassisModel: THREE.Group,
-  scene: THREE.Scene
+  scene: THREE.Scene,
+  chassisModel?: THREE.Group
 ): CANNON.RaycastVehicle {
-  let chassisBoxSize = getBoundingBoxSize(chassisModel);
-  const scale = LENGTH / chassisBoxSize.x;
-  chassisModel.scale.set(scale, scale, scale);
-  chassisBoxSize = getBoundingBoxSize(chassisModel);
+  const chassisBoxSize = getChassisSize(chassisModel);
   const chassisShape = new CANNON.Box(
     new CANNON.Vec3(
       chassisBoxSize.x / 2,
@@ -47,18 +47,31 @@ function setupChassis(
   chassisBody.position.set(0, 4, 0);
   chassisBody.quaternion.setFromEuler(0, -Math.PI / 2, 0);
   addVisual(chassisBody, scene);
-  pushVisual(chassisBody, chassisModel, scene);
+  if (chassisModel) {
+    pushVisual(chassisBody, chassisModel, scene);
+  }
   const vehicle = new CANNON.RaycastVehicle({
     chassisBody
   });
   return vehicle;
 }
 
+function getChassisSize(chassisModel?: THREE.Group): THREE.Vector3 {
+  if (chassisModel) {
+    let chassisBoxSize = getBoundingBoxSize(chassisModel);
+    const scale = LENGTH / chassisBoxSize.x;
+    chassisModel.scale.set(scale, scale, scale);
+    return getBoundingBoxSize(chassisModel);
+  } else {
+    return new THREE.Vector3(LENGTH, CHASSIS_HEIGHT, WIDTH);
+  }
+}
+
 function setupWheels(
   vehicle: CANNON.RaycastVehicle,
   world: CANNON.World,
   scene: THREE.Scene,
-  wheelModel: THREE.Group
+  wheelModel?: THREE.Group
 ) {
   setupWheelsInfo(vehicle);
 
@@ -71,8 +84,10 @@ function setupWheels(
     addVisual(wheelBody, scene);
     world.addBody(wheelBody);
 
-    const clonedWheelModel = cloneWheelModel(i, wheelInfo, wheelModel);
-    pushVisual(wheelBody, clonedWheelModel, scene);
+    if (wheelModel) {
+      const clonedWheelModel = cloneWheelModel(i, wheelInfo, wheelModel);
+      pushVisual(wheelBody, clonedWheelModel, scene);
+    }
   }
 
   const wheelGround = new CANNON.ContactMaterial(

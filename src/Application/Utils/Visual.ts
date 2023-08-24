@@ -1,5 +1,6 @@
 import * as CANNON from "cannon-es";
 import * as THREE from "three";
+import { VisualMode } from "../Config/VisualMode";
 import { setPosition, setQuaternion } from "./Conversion";
 
 const visuals: THREE.Group[] = [];
@@ -23,6 +24,9 @@ export function updateVisual() {
 }
 
 export function addVisual(body: CANNON.Body, scene: THREE.Scene) {
+  if (!VisualMode.showBody) {
+    return;
+  }
   if (!(body instanceof CANNON.Body)) {
     throw new Error("The argument passed to addVisual() is not a body");
   }
