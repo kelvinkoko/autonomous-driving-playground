@@ -11,3 +11,18 @@ export function setQuaternion(
 ) {
   object.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
 }
+
+export function toThreeQuaternion(
+  cannonQuaternion: CANNON.Quaternion
+): THREE.Quaternion {
+  return new THREE.Quaternion(
+    cannonQuaternion.x,
+    cannonQuaternion.y,
+    cannonQuaternion.z,
+    cannonQuaternion.w
+  );
+}
+
+export function toThreeVector3(vec3: CANNON.Vec3): THREE.Vector3 {
+  return new THREE.Vector3(vec3.x, vec3.y, vec3.z);
+}

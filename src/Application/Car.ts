@@ -19,7 +19,10 @@ const OVERHANG_FRONT = 0.841 - overhang_offset;
 const OVERHANG_REAR = 0.978 + overhang_offset;
 const TRACK = 1.58;
 
-export async function createVehicle(world: CANNON.World, scene: THREE.Scene) {
+export async function createVehicle(
+  world: CANNON.World,
+  scene: THREE.Scene
+): Promise<CANNON.RaycastVehicle> {
   const chassisModel = await loadModel(chassisModelFile);
   const wheelModel = await loadModel(wheelModelFile);
 
@@ -28,6 +31,7 @@ export async function createVehicle(world: CANNON.World, scene: THREE.Scene) {
 
   vehicle.addToWorld(world);
   bindKeyEvent(vehicle);
+  return vehicle;
 }
 
 function setupChassis(
