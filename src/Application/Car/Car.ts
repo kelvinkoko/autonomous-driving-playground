@@ -1,11 +1,12 @@
 import * as CANNON from "cannon-es";
-import chassisModelFile from "./Assets/Models/chassis.gltf";
-import wheelModelFile from "./Assets/Models/wheel.glb";
+import chassisModelFile from "../Assets/Models/chassis.gltf";
+import wheelModelFile from "../Assets/Models/wheel.glb";
 
 import * as THREE from "three";
-import { groundMaterial } from "./Ground";
-import { loadModel } from "./Utils/Loader";
-import { addVisual, pushVisual } from "./Utils/Visual";
+import { groundMaterial } from "../Ground";
+import { loadModel } from "../Utils/Loader";
+import { addVisual, pushVisual } from "../Utils/Visual";
+import { CarControlKeys } from "./CarControlKeys";
 
 const WEIGHT = 1611;
 const LENGTH = 4.694;
@@ -20,21 +21,24 @@ const OVERHANG_REAR = 0.978 + overhang_offset;
 const TRACK = 1.58;
 
 export async function createVehicle(
+  position: CANNON.Vec3,
+  controlKeys: CarControlKeys,
   world: CANNON.World,
   scene: THREE.Scene
 ): Promise<CANNON.RaycastVehicle> {
   const chassisModel = await loadModel(chassisModelFile);
   const wheelModel = await loadModel(wheelModelFile);
 
-  const vehicle = setupChassis(scene, chassisModel);
+  const vehicle = setupChassis(position, scene, chassisModel);
   setupWheels(vehicle, world, scene, wheelModel);
 
   vehicle.addToWorld(world);
-  bindKeyEvent(vehicle);
+  bindKeyEvent(vehicle, controlKeys);
   return vehicle;
 }
 
 function setupChassis(
+  position: CANNON.Vec3,
   scene: THREE.Scene,
   chassisModel?: THREE.Group
 ): CANNON.RaycastVehicle {
@@ -48,7 +52,7 @@ function setupChassis(
   );
   const chassisBody = new CANNON.Body({ mass: WEIGHT });
   chassisBody.addShape(chassisShape);
-  chassisBody.position.set(0, 4, 0);
+  chassisBody.position.copy(position);
   chassisBody.quaternion.setFromEuler(0, -Math.PI / 2, 0);
   addVisual(chassisBody, scene);
   if (chassisModel) {
@@ -212,7 +216,7 @@ function getBoundingBoxSize(model: THREE.Group): THREE.Vector3 {
   return box.getSize(new THREE.Vector3());
 }
 
-function bindKeyEvent(vehicle: CANNON.RaycastVehicle) {
+function bindKeyEvent(vehicle: CANNON.RaycastVehicle, keys: CarControlKeys) {
   // Add force on keydown
   document.addEventListener("keydown", event => {
     const maxSteerVal = 0.5;
@@ -221,31 +225,27 @@ function bindKeyEvent(vehicle: CANNON.RaycastVehicle) {
     const rearBrakeForce = 100;
 
     switch (event.key) {
-      case "w":
-      case "ArrowUp":
+      case keys.applyForceKey:
         vehicle.applyEngineForce(-maxForce, 2);
         vehicle.applyEngineForce(-maxForce, 3);
         break;
 
-      case "s":
-      case "ArrowDown":
+      case keys.applyBackwardForceKey:
         vehicle.applyEngineForce(maxForce, 2);
         vehicle.applyEngineForce(maxForce, 3);
         break;
 
-      case "a":
-      case "ArrowLeft":
+      case keys.steerLeft:
         vehicle.setSteeringValue(maxSteerVal, 0);
         vehicle.setSteeringValue(maxSteerVal, 1);
         break;
 
-      case "d":
-      case "ArrowRight":
+      case keys.steerRight:
         vehicle.setSteeringValue(-maxSteerVal, 0);
         vehicle.setSteeringValue(-maxSteerVal, 1);
         break;
 
-      case "b":
+      case keys.applyBreak:
         vehicle.setBrake(frontBrakeForce, 0);
         vehicle.setBrake(frontBrakeForce, 1);
         vehicle.setBrake(rearBrakeForce, 2);

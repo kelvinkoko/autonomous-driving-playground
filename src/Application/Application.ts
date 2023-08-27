@@ -6,7 +6,8 @@ import {
   updateCameraFollow,
   updateCameraFollowBehind
 } from "./Camera";
-import { createVehicle } from "./Car";
+import { createVehicle } from "./Car/Car";
+import { DEFAULT_KEYS_1 } from "./Car/CarControlKeys";
 import { CameraMode, VisualMode } from "./Config/VisualMode";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
@@ -27,7 +28,9 @@ export async function start() {
   createEnvironment(scene, renderer);
   createSky(scene);
   createGround(world, scene);
-  vehicle = await createVehicle(world, scene);
+
+  const initCarPosition = new CANNON.Vec3(0, 4, 0);
+  vehicle = await createVehicle(initCarPosition, DEFAULT_KEYS_1, world, scene);
 
   animate();
 }
