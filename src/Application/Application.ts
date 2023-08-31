@@ -24,6 +24,8 @@ const world = new CANNON.World({
 });
 let vehicle: CANNON.RaycastVehicle;
 
+window.addEventListener("resize", onWindowResize, false);
+
 export async function start() {
   createEnvironment(scene, renderer);
   createSky(scene);
@@ -69,4 +71,11 @@ function setupRenderer() {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   document.body.appendChild(renderer.domElement);
   return renderer;
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
