@@ -69,7 +69,8 @@ function setupRenderer() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  document.body.appendChild(renderer.domElement);
+  const container = document.getElementById("canvas");
+  container?.appendChild(renderer.domElement);
   return renderer;
 }
 
