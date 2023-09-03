@@ -8,5 +8,5 @@ export const VisualMode = {
   showModel: false,
   showBody: true,
   showGroundGrid: true,
-  cameraMode: CameraMode.NONE
+  cameraMode: CameraMode.FOLLOW_BEHIND
 };
