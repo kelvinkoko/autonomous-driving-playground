@@ -48,6 +48,10 @@ const config = {
       {
         test: /\.hdr$/,
         type: "asset/resource"
+      },
+      {
+        test: /\.png$/,
+        type: "asset/resource"
       }
     ]
   },

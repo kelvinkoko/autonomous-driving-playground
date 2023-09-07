@@ -9,7 +9,7 @@ interface Props {
 }
 
 const VehicleStateDisplay = observer(({ worldStore }: Props) => {
-  const speedInKmPerHour = worldStore.carState.speedMS * (3600 / 1000);
+  const speedInKmPerHour = worldStore.carStore.speedMS * (3600 / 1000);
   return (
     <div className={`${glassPanelStyles.grayPanel} ${styles.speed}`}>
       <div></div>

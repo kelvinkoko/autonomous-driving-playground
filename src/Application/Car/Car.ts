@@ -2,8 +2,10 @@ import * as CANNON from "cannon-es";
 import chassisModelFile from "../Assets/Models/chassis.gltf";
 import wheelModelFile from "../Assets/Models/wheel.glb";
 
+import { observe } from "mobx";
 import * as THREE from "three";
 import { groundMaterial } from "../Ground";
+import { CarStore } from "../Store/CarStore";
 import { loadModel } from "../Utils/Loader";
 import { addVisual, pushVisual } from "../Utils/Visual";
 import { CarControlKeys } from "./CarControlKeys";
@@ -24,7 +26,8 @@ export async function createVehicle(
   position: CANNON.Vec3,
   controlKeys: CarControlKeys,
   world: CANNON.World,
-  scene: THREE.Scene
+  scene: THREE.Scene,
+  carStore: CarStore
 ): Promise<CANNON.RaycastVehicle> {
   const chassisModel = await loadModel(chassisModelFile);
   const wheelModel = await loadModel(wheelModelFile);
@@ -33,7 +36,11 @@ export async function createVehicle(
   setupWheels(vehicle, world, scene, wheelModel);
 
   vehicle.addToWorld(world);
-  bindKeyEvent(vehicle, controlKeys);
+  observe(carStore, "steeringRad", change => {
+    vehicle.setSteeringValue(-change.newValue, 0);
+    vehicle.setSteeringValue(-change.newValue, 1);
+  });
+  bindKeyEvent(vehicle, controlKeys, carStore);
   return vehicle;
 }
 
@@ -216,7 +223,11 @@ function getBoundingBoxSize(model: THREE.Group): THREE.Vector3 {
   return box.getSize(new THREE.Vector3());
 }
 
-function bindKeyEvent(vehicle: CANNON.RaycastVehicle, keys: CarControlKeys) {
+function bindKeyEvent(
+  vehicle: CANNON.RaycastVehicle,
+  keys: CarControlKeys,
+  carStore: CarStore
+) {
   // Add force on keydown
   document.addEventListener("keydown", event => {
     const maxSteerVal = 0.5;
@@ -236,13 +247,11 @@ function bindKeyEvent(vehicle: CANNON.RaycastVehicle, keys: CarControlKeys) {
         break;
 
       case keys.steerLeft:
-        vehicle.setSteeringValue(maxSteerVal, 0);
-        vehicle.setSteeringValue(maxSteerVal, 1);
+        carStore.steeringRad = -maxSteerVal;
         break;
 
       case keys.steerRight:
-        vehicle.setSteeringValue(-maxSteerVal, 0);
-        vehicle.setSteeringValue(-maxSteerVal, 1);
+        carStore.steeringRad = maxSteerVal;
         break;
 
       case keys.applyBreak:
@@ -271,14 +280,12 @@ function bindKeyEvent(vehicle: CANNON.RaycastVehicle, keys: CarControlKeys) {
 
       case "a":
       case "ArrowLeft":
-        vehicle.setSteeringValue(0, 0);
-        vehicle.setSteeringValue(0, 1);
+        carStore.steeringRad = 0;
         break;
 
       case "d":
       case "ArrowRight":
-        vehicle.setSteeringValue(0, 0);
-        vehicle.setSteeringValue(0, 1);
+        carStore.steeringRad = 0;
         break;
 
       case "b":

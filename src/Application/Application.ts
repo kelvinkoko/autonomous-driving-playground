@@ -33,7 +33,13 @@ export async function start() {
   createGround(world, scene);
 
   const initCarPosition = new CANNON.Vec3(0, 4, 0);
-  vehicle = await createVehicle(initCarPosition, DEFAULT_KEYS_1, world, scene);
+  vehicle = await createVehicle(
+    initCarPosition,
+    DEFAULT_KEYS_1,
+    world,
+    scene,
+    worldStore.carStore
+  );
 
   animate();
 }
@@ -51,7 +57,7 @@ function animate() {
 function updatePhysics() {
   world.fixedStep();
   if (vehicle) {
-    worldStore.updateCar({ speedMS: vehicle.chassisBody.velocity.length() });
+    worldStore.carStore.speedMS = vehicle.chassisBody.velocity.length();
   }
 }
 

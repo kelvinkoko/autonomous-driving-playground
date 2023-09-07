@@ -1,18 +1,10 @@
-import { action, makeObservable, observable } from "mobx";
-import { CarState } from "../Car/CarState";
+import { CarStore } from "./CarStore";
 
 export class WorldStore {
-  carState: CarState = { speedMS: 0 };
+  carStore: CarStore;
 
   constructor() {
-    makeObservable(this, {
-      carState: observable,
-      updateCar: action
-    });
-  }
-
-  updateCar(state: CarState) {
-    this.carState = state;
+    this.carStore = new CarStore();
   }
 }
 
