@@ -10,6 +10,7 @@ interface Props {
 const SteeringWheel = observer(({ carStore }: Props) => {
   const wheelRef = React.useRef<HTMLDivElement>(null);
   let initialAngleRad = 0;
+  let initialSteeringRad = 0; // Store the initial steering wheel angle
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!wheelRef.current) return;
@@ -20,9 +21,8 @@ const SteeringWheel = observer(({ carStore }: Props) => {
       x: rect.left + rect.width / 2,
       y: rect.top + rect.height / 2
     };
-    initialAngleRad =
-      Math.atan2(e.clientY - center.y, e.clientX - center.x) * (180 / Math.PI) -
-      carStore.steeringRad;
+    initialAngleRad = Math.atan2(e.clientY - center.y, e.clientX - center.x);
+    initialSteeringRad = carStore.steeringRad;
 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
@@ -37,8 +37,13 @@ const SteeringWheel = observer(({ carStore }: Props) => {
       x: rect.left + rect.width / 2,
       y: rect.top + rect.height / 2
     };
-    const angleRad = Math.atan2(e.clientY - center.y, e.clientX - center.x);
-    carStore.steeringRad = angleRad;
+    const currentAngleRad = Math.atan2(
+      e.clientY - center.y,
+      e.clientX - center.x
+    );
+    const differenceRad = currentAngleRad - initialAngleRad;
+
+    carStore.steeringRad = initialSteeringRad + differenceRad;
   };
 
   const handleMouseUp = () => {
