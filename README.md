@@ -7,7 +7,7 @@ An online space for user to program the virtual self-driving car, awatching it t
 This is a work in progress project, you can follow the latest development and the background of project from this blog:
 https://medium.com/@kelvinkoko/list/playground-for-autonomous-driving-7cf682834992
 
-Try out the latest demo here:
+Try out the latest demo here: (The 3D model file size is large which take time to load)
 https://playkuruma.web.app
 
 # Development
