@@ -60,9 +60,13 @@ const SteeringWheel = observer(({ carStore }: Props) => {
       className="steering-wheel"
       onMouseDown={handleMouseDown}
       onDragStart={handleDragStart}
-      style={{ transform: `rotate(${carStore.steeringRad}rad)` }}
     >
-      <img src={SteeringWheelImage} />
+      <img
+        src={SteeringWheelImage}
+        style={{
+          transform: `rotate(${carStore.steeringRad}rad)`
+        }}
+      />
     </div>
   );
 });
