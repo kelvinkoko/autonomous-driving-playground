@@ -7,6 +7,14 @@ export class CarStore {
   constructor() {
     makeAutoObservable(this);
   }
+
+  setSpeed(speedMS: number) {
+    this.speedMS = speedMS;
+  }
+
+  setSteering(steeringRad: number) {
+    this.steeringRad = steeringRad;
+  }
 }
 
 export const worldStore = new CarStore();

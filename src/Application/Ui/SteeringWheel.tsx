@@ -43,7 +43,7 @@ const SteeringWheel = observer(({ carStore }: Props) => {
     );
     const differenceRad = currentAngleRad - initialAngleRad;
 
-    carStore.steeringRad = initialSteeringRad + differenceRad;
+    carStore.setSteering(initialSteeringRad + differenceRad);
   };
 
   const handleMouseUp = () => {

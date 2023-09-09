@@ -57,7 +57,7 @@ function animate() {
 function updatePhysics() {
   world.fixedStep();
   if (vehicle) {
-    worldStore.carStore.speedMS = vehicle.chassisBody.velocity.length();
+    worldStore.carStore.setSpeed(vehicle.chassisBody.velocity.length());
   }
 }
 

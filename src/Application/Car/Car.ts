@@ -247,11 +247,11 @@ function bindKeyEvent(
         break;
 
       case keys.steerLeft:
-        carStore.steeringRad = -maxSteerVal;
+        carStore.setSteering(-maxSteerVal);
         break;
 
       case keys.steerRight:
-        carStore.steeringRad = maxSteerVal;
+        carStore.setSteering(maxSteerVal);
         break;
 
       case keys.applyBreak:
@@ -280,12 +280,12 @@ function bindKeyEvent(
 
       case "a":
       case "ArrowLeft":
-        carStore.steeringRad = 0;
+        carStore.setSteering(0);
         break;
 
       case "d":
       case "ArrowRight":
-        carStore.steeringRad = 0;
+        carStore.setSteering(0);
         break;
 
       case "b":
