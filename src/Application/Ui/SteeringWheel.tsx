@@ -1,13 +1,12 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import SteeringWheelImage from "../Assets/Images/steering-wheel.png";
-import { CarStore } from "../Store/CarStore";
+import StoreContext from "../Store/StoreContext";
 
-interface Props {
-  carStore: CarStore;
-}
+const SteeringWheel = observer(() => {
+  const rootStore = React.useContext(StoreContext);
+  const carStore = rootStore.carStore;
 
-const SteeringWheel = observer(({ carStore }: Props) => {
   const wheelRef = React.useRef<HTMLDivElement>(null);
   let initialAngleRad = 0;
   let initialSteeringRad = 0; // Store the initial steering wheel angle

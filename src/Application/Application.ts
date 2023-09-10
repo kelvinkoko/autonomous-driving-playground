@@ -11,7 +11,7 @@ import { DEFAULT_KEYS_1 } from "./Car/CarControlKeys";
 import { CameraMode, VisualMode } from "./Config/VisualMode";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
-import { worldStore } from "./Store/WordStore";
+import { rootStore } from "./Store/RootStore";
 import { updateVisual } from "./Utils/Visual";
 import { createEnvironment } from "./World/Environment";
 
@@ -38,7 +38,7 @@ export async function start() {
     DEFAULT_KEYS_1,
     world,
     scene,
-    worldStore.carStore
+    rootStore.carStore
   );
 
   animate();
@@ -57,7 +57,7 @@ function animate() {
 function updatePhysics() {
   world.fixedStep();
   if (vehicle) {
-    worldStore.carStore.setSpeed(vehicle.chassisBody.velocity.length());
+    rootStore.carStore.setSpeed(vehicle.chassisBody.velocity.length());
   }
 }
 

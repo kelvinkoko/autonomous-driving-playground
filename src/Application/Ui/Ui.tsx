@@ -1,5 +1,5 @@
 import * as React from "react";
-import { worldStore } from "../Store/WordStore";
+import { rootStore } from "../Store/RootStore";
 import BrakePedal from "./BrakePedal";
 import GasPedal from "./GasPedal";
 import glassStyles from "./GlassPanels.css";
@@ -11,10 +11,10 @@ const Ui = () => {
   return (
     <React.Fragment>
       <div className={`${glassStyles.grayPanel} ${styles.speedPanel}`}>
-        <SpeedDisplay carStore={worldStore.carStore} />
+        <SpeedDisplay />
       </div>
       <div className={`${glassStyles.whitePanel} ${styles.steeringPanel}`}>
-        <SteeringWheel carStore={worldStore.carStore} />
+        <SteeringWheel />
       </div>
       <div className={`${glassStyles.whitePanel} ${styles.pedalsPanel}`}>
         <BrakePedal />

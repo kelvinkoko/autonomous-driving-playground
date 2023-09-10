@@ -1,14 +1,11 @@
 import { observer } from "mobx-react";
 import * as React from "react";
+import StoreContext from "../Store/StoreContext";
 import styles from "./SpeedDisplay.css";
-import { CarStore } from "../Store/CarStore";
 
-interface Props {
-  carStore: CarStore;
-}
-
-const SpeedDisplay = observer(({ carStore }: Props) => {
-  const speedInKmPerHour = carStore.speedMS * (3600 / 1000);
+const SpeedDisplay = observer(() => {
+  const rootStore = React.useContext(StoreContext);
+  const speedInKmPerHour = rootStore.carStore.speedMS * (3600 / 1000);
   return (
     <div className={styles.speed}>
       <div></div>

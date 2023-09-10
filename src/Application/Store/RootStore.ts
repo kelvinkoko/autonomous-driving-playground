@@ -1,6 +1,6 @@
 import { CarStore } from "./CarStore";
 
-export class WorldStore {
+export class RootStore {
   carStore: CarStore;
 
   constructor() {
@@ -8,4 +8,4 @@ export class WorldStore {
   }
 }
 
-export const worldStore = new WorldStore();
+export const rootStore = new RootStore();
