@@ -1,7 +1,6 @@
 import * as React from "react";
-import { rootStore } from "../Store/RootStore";
 import BrakePedal from "./BrakePedal";
-import GasPedal from "./GasPedal";
+import ForcePedal from "./ForcePedal";
 import glassStyles from "./GlassPanels.css";
 import SpeedDisplay from "./SpeedDisplay";
 import SteeringWheel from "./SteeringWheel";
@@ -18,7 +17,7 @@ const Ui = () => {
       </div>
       <div className={`${glassStyles.whitePanel} ${styles.pedalsPanel}`}>
         <BrakePedal />
-        <GasPedal />
+        <ForcePedal />
       </div>
     </React.Fragment>
   );

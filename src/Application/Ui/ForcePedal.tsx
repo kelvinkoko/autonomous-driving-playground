@@ -1,17 +1,17 @@
 import * as React from "react";
-import GasPedalImage from "../Assets/Images/gas-pedal.png";
+import ForcePedalImage from "../Assets/Images/force-pedal.png";
 import Pedal from "./Pedal";
 
-const GasPedal = () => {
+const ForcePedal = () => {
   return (
     <Pedal
       min={0}
       max={100}
-      thumbImage={GasPedalImage}
+      thumbImage={ForcePedalImage}
       imageWidthPx={30}
       imageHeightPx={49}
     />
   );
 };
 
-export default GasPedal;
+export default ForcePedal;
