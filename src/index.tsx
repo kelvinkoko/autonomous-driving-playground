@@ -5,5 +5,5 @@ import Ui from "./Application/Ui/Ui";
 
 start();
 
-const root = createRoot(document.getElementById("ui")!);
+const root = createRoot(document.getElementById("overlay-ui")!);
 root.render(<Ui />);

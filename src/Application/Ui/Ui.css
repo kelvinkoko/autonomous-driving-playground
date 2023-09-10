@@ -1,5 +1,29 @@
-.ui {
-  width: 100%;
+.speedPanel {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 10px;
+  user-select: none;
+}
+
+.steeringPanel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 10px;
+  padding: 10px;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.pedalsPanel {
   display: flex;
-  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+  padding: 30px 10px;
+  pointer-events: auto;
+  user-select: none;
 }
