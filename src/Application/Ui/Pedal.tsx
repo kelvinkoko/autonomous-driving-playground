@@ -45,7 +45,11 @@ const Pedal = ({
   const handleDrag = (clientY: number) => {
     if (sliderRef.current) {
       const rect = sliderRef.current.getBoundingClientRect();
-      const percentage = (clientY - rect.top) / rect.height;
+      const dragY = Math.min(
+        Math.max(clientY, rect.top),
+        rect.top + rect.height
+      );
+      const percentage = (dragY - rect.top) / rect.height;
       const newValue = min + (max - min) * percentage;
       setValue(Math.min(Math.max(newValue, min), max));
       if (onChange) {

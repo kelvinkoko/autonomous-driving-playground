@@ -22,6 +22,10 @@ const OVERHANG_FRONT = 0.841 - overhang_offset;
 const OVERHANG_REAR = 0.978 + overhang_offset;
 const TRACK = 1.58;
 
+const MAX_STEER = 0.5;
+export const MAX_FORCE = 1331;
+export const MAX_BREAK_FORCE = 100;
+
 export async function createVehicle(
   position: CANNON.Vec3,
   controlKeys: CarControlKeys,
@@ -36,12 +40,27 @@ export async function createVehicle(
   setupWheels(vehicle, world, scene, wheelModel);
 
   vehicle.addToWorld(world);
+
+  observeStore(carStore, vehicle);
+  bindKeyEvent(vehicle, controlKeys, carStore);
+  return vehicle;
+}
+
+function observeStore(carStore: CarStore, vehicle: CANNON.RaycastVehicle) {
   observe(carStore, "steeringRad", change => {
     vehicle.setSteeringValue(-change.newValue, 0);
     vehicle.setSteeringValue(-change.newValue, 1);
   });
-  bindKeyEvent(vehicle, controlKeys, carStore);
-  return vehicle;
+  observe(carStore, "applyingForce", change => {
+    vehicle.applyEngineForce(-change.newValue, 2);
+    vehicle.applyEngineForce(-change.newValue, 3);
+  });
+  observe(carStore, "applyingBrake", change => {
+    vehicle.setBrake(change.newValue, 0);
+    vehicle.setBrake(change.newValue, 1);
+    vehicle.setBrake(change.newValue, 2);
+    vehicle.setBrake(change.newValue, 3);
+  });
 }
 
 function setupChassis(
@@ -230,35 +249,25 @@ function bindKeyEvent(
 ) {
   // Add force on keydown
   document.addEventListener("keydown", event => {
-    const maxSteerVal = 0.5;
-    const maxForce = 1331;
-    const frontBrakeForce = 100;
-    const rearBrakeForce = 100;
-
     switch (event.key) {
       case keys.applyForceKey:
-        vehicle.applyEngineForce(-maxForce, 2);
-        vehicle.applyEngineForce(-maxForce, 3);
+        carStore.applyForce(MAX_FORCE);
         break;
 
       case keys.applyBackwardForceKey:
-        vehicle.applyEngineForce(maxForce, 2);
-        vehicle.applyEngineForce(maxForce, 3);
+        carStore.applyForce(-MAX_FORCE);
         break;
 
       case keys.steerLeft:
-        carStore.setSteering(-maxSteerVal);
+        carStore.setSteering(-MAX_STEER);
         break;
 
       case keys.steerRight:
-        carStore.setSteering(maxSteerVal);
+        carStore.setSteering(MAX_STEER);
         break;
 
       case keys.applyBreak:
-        vehicle.setBrake(frontBrakeForce, 0);
-        vehicle.setBrake(frontBrakeForce, 1);
-        vehicle.setBrake(rearBrakeForce, 2);
-        vehicle.setBrake(rearBrakeForce, 3);
+        carStore.applyBrake(MAX_BREAK_FORCE);
         break;
     }
   });
@@ -268,14 +277,12 @@ function bindKeyEvent(
     switch (event.key) {
       case "w":
       case "ArrowUp":
-        vehicle.applyEngineForce(0, 2);
-        vehicle.applyEngineForce(0, 3);
+        carStore.applyForce(0);
         break;
 
       case "s":
       case "ArrowDown":
-        vehicle.applyEngineForce(0, 2);
-        vehicle.applyEngineForce(0, 3);
+        carStore.applyForce(0);
         break;
 
       case "a":
@@ -289,10 +296,7 @@ function bindKeyEvent(
         break;
 
       case "b":
-        vehicle.setBrake(0, 0);
-        vehicle.setBrake(0, 1);
-        vehicle.setBrake(0, 2);
-        vehicle.setBrake(0, 3);
+        carStore.applyBrake(0);
         break;
     }
   });
