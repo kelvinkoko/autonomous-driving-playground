@@ -42,6 +42,23 @@ const Pedal = ({
     window.removeEventListener("mouseup", handleMouseUp);
   };
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    handleDrag(touch.clientY);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleTouchEnd);
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0];
+    handleDrag(touch.clientY);
+  };
+
+  const handleTouchEnd = () => {
+    window.removeEventListener("touchmove", handleTouchMove);
+    window.removeEventListener("touchend", handleTouchEnd);
+  };
+
   const handleDrag = (clientY: number) => {
     if (sliderRef.current) {
       const rect = sliderRef.current.getBoundingClientRect();
@@ -70,6 +87,7 @@ const Pedal = ({
       <div
         className={styles.sliderThumb}
         onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
         style={{
           width: `${imageWidthPx}px`,
           height: `${imageHeightPx}px`,
