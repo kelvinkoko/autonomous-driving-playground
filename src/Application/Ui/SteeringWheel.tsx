@@ -11,7 +11,7 @@ const SteeringWheel = observer(() => {
   let initialAngleRad = 0;
   let initialSteeringRad = 0; // Store the initial steering wheel angle
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleStart = (clientX: number, clientY: number) => {
     if (!wheelRef.current) return;
 
     const wheel = wheelRef.current;
@@ -20,14 +20,16 @@ const SteeringWheel = observer(() => {
       x: rect.left + rect.width / 2,
       y: rect.top + rect.height / 2
     };
-    initialAngleRad = Math.atan2(e.clientY - center.y, e.clientX - center.x);
+    initialAngleRad = Math.atan2(clientY - center.y, clientX - center.x);
     initialSteeringRad = carStore.steeringRad;
 
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mouseup", handleEnd);
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleTouchEnd);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMove = (clientX: number, clientY: number) => {
     if (!wheelRef.current) return;
 
     const wheel = wheelRef.current;
@@ -36,19 +38,41 @@ const SteeringWheel = observer(() => {
       x: rect.left + rect.width / 2,
       y: rect.top + rect.height / 2
     };
-    const currentAngleRad = Math.atan2(
-      e.clientY - center.y,
-      e.clientX - center.x
-    );
+    const currentAngleRad = Math.atan2(clientY - center.y, clientX - center.x);
     const differenceRad = currentAngleRad - initialAngleRad;
 
     carStore.setSteering(initialSteeringRad + differenceRad);
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", handleMouseUp);
+    window.removeEventListener("mouseup", handleEnd);
+    window.removeEventListener("touchmove", handleTouchMove);
+    window.removeEventListener("touchend", handleTouchEnd);
   };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    handleMove(e.clientX, e.clientY);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    handleStart(e.clientX, e.clientY);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    handleStart(touch.clientX, touch.clientY);
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0];
+    handleMove(touch.clientX, touch.clientY);
+  };
+
+  const handleTouchEnd = () => {
+    handleEnd();
+  };
+
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
@@ -56,8 +80,8 @@ const SteeringWheel = observer(() => {
   return (
     <div
       ref={wheelRef}
-      className="steering-wheel"
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       onDragStart={handleDragStart}
     >
       <img
