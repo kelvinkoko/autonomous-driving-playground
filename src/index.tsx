@@ -13,3 +13,12 @@ root.render(
     <Ui />
   </StoreContext.Provider>
 );
+
+// Avoid the page being scrolled when touch and drag
+document.addEventListener(
+  "touchmove",
+  function (e) {
+    e.preventDefault();
+  },
+  { passive: false }
+);
