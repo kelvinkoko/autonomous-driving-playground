@@ -21,23 +21,18 @@ const Pedal = ({
 }: Props) => {
   const [value, setValue] = useState(min);
   const sliderRef = useRef<HTMLDivElement>(null);
-  let isDragging = false;
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    isDragging = true;
     handleDrag(e.clientY);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (isDragging) {
-      handleDrag(e.clientY);
-    }
+    handleDrag(e.clientY);
   };
 
   const handleMouseUp = () => {
-    isDragging = false;
     window.removeEventListener("mousemove", handleMouseMove);
     window.removeEventListener("mouseup", handleMouseUp);
   };
