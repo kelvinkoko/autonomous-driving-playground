@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import SteeringWheelImage from "../Assets/Images/steering-wheel.png";
 import StoreContext from "../Store/StoreContext";
+import { getTouchPoint } from "../Utils/TouchUtil";
 
 const SteeringWheel = observer(() => {
   const rootStore = React.useContext(StoreContext);
@@ -60,12 +61,18 @@ const SteeringWheel = observer(() => {
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    const touch = e.touches[0];
+    const touch = getTouchPoint(e, wheelRef);
+    if (!touch) {
+      return;
+    }
     handleStart(touch.clientX, touch.clientY);
   };
 
   const handleTouchMove = (e: TouchEvent) => {
-    const touch = e.touches[0];
+    const touch = getTouchPoint(e, wheelRef);
+    if (!touch) {
+      return;
+    }
     handleMove(touch.clientX, touch.clientY);
   };
 

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useRef, useState } from "react";
+import { getTouchPoint } from "../Utils/TouchUtil";
 import styles from "./Pedal.css";
 
 interface Props {
@@ -38,14 +39,20 @@ const Pedal = ({
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    const touch = e.touches[0];
+    const touch = getTouchPoint(e, sliderRef);
+    if (!touch) {
+      return;
+    }
     handleDrag(touch.clientY);
     window.addEventListener("touchmove", handleTouchMove);
     window.addEventListener("touchend", handleTouchEnd);
   };
 
   const handleTouchMove = (e: TouchEvent) => {
-    const touch = e.touches[0];
+    const touch = getTouchPoint(e, sliderRef);
+    if (!touch) {
+      return;
+    }
     handleDrag(touch.clientY);
   };
 
