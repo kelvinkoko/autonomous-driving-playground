@@ -6,9 +6,33 @@
     <style>
       body {
         margin: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, sans-serif;
+        overflow: hidden;
+      }
+      #canvas {
+        position: absolute;
+        height: 100%;
+        height: -moz-available;
+        height: -webkit-fill-available;
+        height: fill-available;
+        width: 100vw;
+      }
+      #overlay-ui {
+        position: absolute;
+        pointer-events: none;
+        /* Setting heights to fix 100vh issue in mobile */
+        height: 100%;
+        height: -moz-available;
+        height: -webkit-fill-available;
+        height: fill-available;
+        width: 100vw;
       }
     </style>
   </head>
 
-  <body></body>
+  <body>
+    <div id="canvas"></div>
+    <div id="overlay-ui"></div>
+  </body>
 </html>

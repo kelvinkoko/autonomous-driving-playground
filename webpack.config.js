@@ -3,7 +3,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const config = {
-  entry: "./src/index.ts",
+  entry: "./src/index.tsx",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js"
@@ -24,13 +24,22 @@ const config = {
         exclude: /node_modules/
       },
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         use: "babel-loader",
         exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              modules: true
+            }
+          }
+        ]
       },
       {
         test: /\.(glb|gltf)$/,
@@ -38,6 +47,10 @@ const config = {
       },
       {
         test: /\.hdr$/,
+        type: "asset/resource"
+      },
+      {
+        test: /\.png$/,
         type: "asset/resource"
       }
     ]

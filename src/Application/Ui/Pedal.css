@@ -1,0 +1,26 @@
+.verticalSlider {
+  width: 6px;
+  height: 80px;
+  background-color: #ffffff40;
+  position: relative;
+  border-radius: 8px;
+  overflow: visible;
+  margin: 0px 20px;
+}
+
+.sliderThumb {
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, -25%);
+  cursor: pointer;
+}
+
+.sliderProgress {
+  width: 100%;
+  height: 0;
+  background-color: #ffffff91;
+  position: absolute;
+  top: 0;
+  border-radius: 8px;
+}

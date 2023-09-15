@@ -2,8 +2,10 @@ import * as CANNON from "cannon-es";
 import chassisModelFile from "../Assets/Models/chassis.gltf";
 import wheelModelFile from "../Assets/Models/wheel.glb";
 
+import { observe } from "mobx";
 import * as THREE from "three";
 import { groundMaterial } from "../Ground";
+import { CarStore } from "../Store/CarStore";
 import { loadModel } from "../Utils/Loader";
 import { addVisual, pushVisual } from "../Utils/Visual";
 import { CarControlKeys } from "./CarControlKeys";
@@ -20,11 +22,16 @@ const OVERHANG_FRONT = 0.841 - overhang_offset;
 const OVERHANG_REAR = 0.978 + overhang_offset;
 const TRACK = 1.58;
 
+const MAX_STEER = 0.5;
+export const MAX_FORCE = 1331;
+export const MAX_BREAK_FORCE = 100;
+
 export async function createVehicle(
   position: CANNON.Vec3,
   controlKeys: CarControlKeys,
   world: CANNON.World,
-  scene: THREE.Scene
+  scene: THREE.Scene,
+  carStore: CarStore
 ): Promise<CANNON.RaycastVehicle> {
   const chassisModel = await loadModel(chassisModelFile);
   const wheelModel = await loadModel(wheelModelFile);
@@ -33,8 +40,27 @@ export async function createVehicle(
   setupWheels(vehicle, world, scene, wheelModel);
 
   vehicle.addToWorld(world);
-  bindKeyEvent(vehicle, controlKeys);
+
+  observeStore(carStore, vehicle);
+  bindKeyEvent(vehicle, controlKeys, carStore);
   return vehicle;
+}
+
+function observeStore(carStore: CarStore, vehicle: CANNON.RaycastVehicle) {
+  observe(carStore, "steeringRad", change => {
+    vehicle.setSteeringValue(-change.newValue, 0);
+    vehicle.setSteeringValue(-change.newValue, 1);
+  });
+  observe(carStore, "applyingForce", change => {
+    vehicle.applyEngineForce(-change.newValue, 2);
+    vehicle.applyEngineForce(-change.newValue, 3);
+  });
+  observe(carStore, "applyingBrake", change => {
+    vehicle.setBrake(change.newValue, 0);
+    vehicle.setBrake(change.newValue, 1);
+    vehicle.setBrake(change.newValue, 2);
+    vehicle.setBrake(change.newValue, 3);
+  });
 }
 
 function setupChassis(
@@ -216,40 +242,32 @@ function getBoundingBoxSize(model: THREE.Group): THREE.Vector3 {
   return box.getSize(new THREE.Vector3());
 }
 
-function bindKeyEvent(vehicle: CANNON.RaycastVehicle, keys: CarControlKeys) {
+function bindKeyEvent(
+  vehicle: CANNON.RaycastVehicle,
+  keys: CarControlKeys,
+  carStore: CarStore
+) {
   // Add force on keydown
   document.addEventListener("keydown", event => {
-    const maxSteerVal = 0.5;
-    const maxForce = 1331;
-    const frontBrakeForce = 100;
-    const rearBrakeForce = 100;
-
     switch (event.key) {
       case keys.applyForceKey:
-        vehicle.applyEngineForce(-maxForce, 2);
-        vehicle.applyEngineForce(-maxForce, 3);
+        carStore.applyForce(MAX_FORCE);
         break;
 
       case keys.applyBackwardForceKey:
-        vehicle.applyEngineForce(maxForce, 2);
-        vehicle.applyEngineForce(maxForce, 3);
+        carStore.applyForce(-MAX_FORCE);
         break;
 
       case keys.steerLeft:
-        vehicle.setSteeringValue(maxSteerVal, 0);
-        vehicle.setSteeringValue(maxSteerVal, 1);
+        carStore.setSteering(-MAX_STEER);
         break;
 
       case keys.steerRight:
-        vehicle.setSteeringValue(-maxSteerVal, 0);
-        vehicle.setSteeringValue(-maxSteerVal, 1);
+        carStore.setSteering(MAX_STEER);
         break;
 
       case keys.applyBreak:
-        vehicle.setBrake(frontBrakeForce, 0);
-        vehicle.setBrake(frontBrakeForce, 1);
-        vehicle.setBrake(rearBrakeForce, 2);
-        vehicle.setBrake(rearBrakeForce, 3);
+        carStore.applyBrake(MAX_BREAK_FORCE);
         break;
     }
   });
@@ -259,33 +277,26 @@ function bindKeyEvent(vehicle: CANNON.RaycastVehicle, keys: CarControlKeys) {
     switch (event.key) {
       case "w":
       case "ArrowUp":
-        vehicle.applyEngineForce(0, 2);
-        vehicle.applyEngineForce(0, 3);
+        carStore.applyForce(0);
         break;
 
       case "s":
       case "ArrowDown":
-        vehicle.applyEngineForce(0, 2);
-        vehicle.applyEngineForce(0, 3);
+        carStore.applyForce(0);
         break;
 
       case "a":
       case "ArrowLeft":
-        vehicle.setSteeringValue(0, 0);
-        vehicle.setSteeringValue(0, 1);
+        carStore.setSteering(0);
         break;
 
       case "d":
       case "ArrowRight":
-        vehicle.setSteeringValue(0, 0);
-        vehicle.setSteeringValue(0, 1);
+        carStore.setSteering(0);
         break;
 
       case "b":
-        vehicle.setBrake(0, 0);
-        vehicle.setBrake(0, 1);
-        vehicle.setBrake(0, 2);
-        vehicle.setBrake(0, 3);
+        carStore.applyBrake(0);
         break;
     }
   });

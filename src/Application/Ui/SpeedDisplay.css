@@ -1,0 +1,23 @@
+.speed {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  margin: 10px;
+  width: 120px;
+}
+
+.speed > * {
+  flex: 1;
+}
+
+.speedValue {
+  color: #ffffff;
+  font-size: 44px;
+  text-align: center;
+}
+
+.speedUnit {
+  color: #ffffff;
+  font-size: 12px;
+}

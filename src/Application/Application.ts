@@ -11,6 +11,7 @@ import { DEFAULT_KEYS_1 } from "./Car/CarControlKeys";
 import { CameraMode, VisualMode } from "./Config/VisualMode";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
+import { rootStore } from "./Store/RootStore";
 import { updateVisual } from "./Utils/Visual";
 import { createEnvironment } from "./World/Environment";
 
@@ -32,7 +33,13 @@ export async function start() {
   createGround(world, scene);
 
   const initCarPosition = new CANNON.Vec3(0, 4, 0);
-  vehicle = await createVehicle(initCarPosition, DEFAULT_KEYS_1, world, scene);
+  vehicle = await createVehicle(
+    initCarPosition,
+    DEFAULT_KEYS_1,
+    world,
+    scene,
+    rootStore.carStore
+  );
 
   animate();
 }
@@ -49,6 +56,9 @@ function animate() {
 
 function updatePhysics() {
   world.fixedStep();
+  if (vehicle) {
+    rootStore.carStore.setSpeed(vehicle.chassisBody.velocity.length());
+  }
 }
 
 function updateCamera() {
@@ -69,7 +79,8 @@ function setupRenderer() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  document.body.appendChild(renderer.domElement);
+  const container = document.getElementById("canvas");
+  container?.appendChild(renderer.domElement);
   return renderer;
 }
 
