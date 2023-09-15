@@ -12,12 +12,21 @@
       }
       #canvas {
         position: absolute;
+        height: 100%;
+        height: -moz-available;
+        height: -webkit-fill-available;
+        height: fill-available;
+        width: 100vw;
       }
       #overlay-ui {
         position: absolute;
-        height: 100vh;
-        width: 100vw;
         pointer-events: none;
+        /* Setting heights to fix 100vh issue in mobile */
+        height: 100%;
+        height: -moz-available;
+        height: -webkit-fill-available;
+        height: fill-available;
+        width: 100vw;
       }
     </style>
   </head>
