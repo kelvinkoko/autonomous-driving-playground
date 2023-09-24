@@ -9,6 +9,8 @@ import {
 import { createVehicle } from "./Car/Car";
 import { DEFAULT_KEYS_1 } from "./Car/CarControlKeys";
 import { CameraMode, VisualMode } from "./Config/VisualMode";
+
+import { createTrack } from "./Environment/Track";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
 import { rootStore } from "./Store/RootStore";
@@ -31,6 +33,7 @@ export async function start() {
   createEnvironment(scene, renderer);
   createSky(scene);
   createGround(world, scene);
+  createTrack(scene);
 
   const initCarPosition = new CANNON.Vec3(0, 4, 0);
   vehicle = await createVehicle(
@@ -62,6 +65,9 @@ function updatePhysics() {
 }
 
 function updateCamera() {
+  if (!vehicle) {
+    return;
+  }
   switch (VisualMode.cameraMode) {
     case CameraMode.FOLLOW:
       updateCameraFollow(camera, controls, vehicle);

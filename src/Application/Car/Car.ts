@@ -79,7 +79,7 @@ function setupChassis(
   const chassisBody = new CANNON.Body({ mass: WEIGHT });
   chassisBody.addShape(chassisShape);
   chassisBody.position.copy(position);
-  chassisBody.quaternion.setFromEuler(0, -Math.PI / 2, 0);
+  chassisBody.quaternion.setFromEuler(0, Math.PI, 0);
   addVisual(chassisBody, scene);
   if (chassisModel) {
     pushVisual(chassisBody, chassisModel, scene);

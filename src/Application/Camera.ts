@@ -7,7 +7,7 @@ export function setupCamera() {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
-  camera.position.set(5, 1, 0);
+  camera.position.set(-5, 1, 0);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
   return camera;
 }
