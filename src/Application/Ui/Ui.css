@@ -7,6 +7,20 @@
   user-select: none;
 }
 
+.loadingPanel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 10px;
+  user-select: none;
+
+  padding: 20px;
+  color: #ffffffcf;
+  font-size: 24px;
+  font-weight: 300;
+}
+
 .steeringPanel {
   position: absolute;
   bottom: 0;
