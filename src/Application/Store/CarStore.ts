@@ -26,5 +26,3 @@ export class CarStore {
     this.applyingBrake = value;
   };
 }
-
-export const worldStore = new CarStore();

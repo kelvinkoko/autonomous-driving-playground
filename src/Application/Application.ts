@@ -17,6 +17,8 @@ import { rootStore } from "./Store/RootStore";
 import { updateVisual } from "./Utils/Visual";
 import { createEnvironment } from "./World/Environment";
 
+const appStore = rootStore.applicationStore;
+
 const scene = new THREE.Scene();
 const camera = setupCamera();
 const renderer = setupRenderer();
@@ -34,6 +36,7 @@ export async function start() {
   createSky(scene);
   createGround(world, scene);
   createTrack(scene);
+  animate();
 
   const initCarPosition = new CANNON.Vec3(0, 4, 0);
   vehicle = await createVehicle(
@@ -44,6 +47,7 @@ export async function start() {
     rootStore.carStore
   );
 
+  appStore.setIsLoading(false);
   animate();
 }
 
