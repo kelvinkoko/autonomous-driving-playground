@@ -1,5 +1,6 @@
 import * as CANNON from "cannon-es";
 import chassisModelFile from "../Assets/Models/chassis.gltf";
+import chassisLowResModelFile from "../Assets/Models/model3-chassis-low.glb";
 import wheelModelFile from "../Assets/Models/wheel.glb";
 
 import { observe } from "mobx";
@@ -10,6 +11,17 @@ import { loadModel } from "../Utils/Loader";
 import { addVisual, pushVisual } from "../Utils/Visual";
 import { CarControlKeys } from "./CarControlKeys";
 
+const model3HighRes: CarConfig = {
+  chassisModel: chassisModelFile,
+  overhangOffset: 0.06 // this is just adjust visually
+};
+const model3LowRes: CarConfig = {
+  chassisModel: chassisLowResModelFile,
+  overhangOffset: 0.0
+};
+
+const currentCarModel = model3LowRes;
+
 const WEIGHT = 1611;
 const LENGTH = 4.694;
 const WIDTH = 2.088;
@@ -17,7 +29,7 @@ const OVERALL_HEIGHT = 1.445;
 const GROUND_CLEARANCE = 0.14;
 const CHASSIS_HEIGHT = OVERALL_HEIGHT - GROUND_CLEARANCE;
 const WHEEL_RADIUS = 0.3353;
-const overhang_offset = 0.06; // this is just adjust visually
+const overhang_offset = currentCarModel.overhangOffset;
 const OVERHANG_FRONT = 0.841 - overhang_offset;
 const OVERHANG_REAR = 0.978 + overhang_offset;
 const TRACK = 1.58;
@@ -26,6 +38,11 @@ const MAX_STEER = 0.5;
 export const MAX_FORCE = 1331;
 export const MAX_BREAK_FORCE = 100;
 
+interface CarConfig {
+  chassisModel: string;
+  overhangOffset: number;
+}
+
 export async function createVehicle(
   position: CANNON.Vec3,
   controlKeys: CarControlKeys,
@@ -33,7 +50,7 @@ export async function createVehicle(
   scene: THREE.Scene,
   carStore: CarStore
 ): Promise<CANNON.RaycastVehicle> {
-  const chassisModel = await loadModel(chassisModelFile);
+  const chassisModel = await loadModel(currentCarModel.chassisModel);
   const wheelModel = await loadModel(wheelModelFile);
 
   const vehicle = setupChassis(position, scene, chassisModel);
