@@ -1,0 +1,41 @@
+.modelSelectionPanel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 10px;
+  user-select: none;
+  pointer-events: auto;
+
+  padding: 20px;
+  color: #ffffffb0;
+  font-weight: 300;
+}
+
+.title {
+  text-align: center;
+  font-weight: 500;
+  font-size: 24px;
+  margin: 6px;
+  color: #ffffffdb;
+}
+
+.column {
+  display: flex;
+  flex-direction: row;
+  color: #ffffffcf;
+  font-size: 16px;
+  font-weight: 300;
+  text-align: center;
+}
+
+.option {
+  padding: 10px;
+  border: #00000000 solid 2px;
+}
+
+.option:hover {
+  background-color: #3f9fdb30;
+  border: #00aeffba solid 2px;
+  border-radius: 10px;
+}
