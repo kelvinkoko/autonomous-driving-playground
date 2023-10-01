@@ -29,11 +29,11 @@ Basically, the source code of this project is free to use whatever way you want.
 # Credits
 - The awsome 3D models used in this project:
 
-Model 3's 3D model (Decoupled wheel and chassis from this two models)
+Model 3's 3D model
 
-[Model 3 chassis](https://sketchfab.com/3d-models/tesla-2018-model-3-5ef9b845aaf44203b6d04e2c677e444f) (CC Attribution)
+[large model](https://sketchfab.com/3d-models/tesla-2018-model-3-5ef9b845aaf44203b6d04e2c677e444f) (CC Attribution)
 
-[Model 3 wheel](https://sketchfab.com/3d-models/tesla-model-3-117d7dbdd6f94df9886c42995cdd06db) (CC Attribution-NonCommercial)
+[small model](https://sketchfab.com/3d-models/tesla-model-3-117d7dbdd6f94df9886c42995cdd06db) (CC Attribution-NonCommercial)
 
 
 - HRD Image:
