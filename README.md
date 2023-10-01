@@ -2,7 +2,8 @@
 An online space for user to program the virtual self-driving car, awatching it take on the tracks and racing with each others.
 
 # 🏗 Work in progress
-![screenshot_20230903](https://github.com/kelvinkoko/autonomous-driving-playground/assets/2594899/007ee7f3-1620-4df9-81d2-1453251d200d)
+<img width="1070" alt="drive-on-track" src="https://github.com/kelvinkoko/autonomous-driving-playground/assets/2594899/7234ee26-aa45-46a9-99a3-f53d48df47e8">
+
 
 This is a work in progress project, you can follow the latest development and the background of project from this blog:
 
