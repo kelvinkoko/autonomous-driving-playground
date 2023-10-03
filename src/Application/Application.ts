@@ -6,13 +6,20 @@ import {
   updateCameraFollow,
   updateCameraFollowBehind
 } from "./Camera";
-import { createVehicle } from "./Car/Car";
+import {
+  CarConfig,
+  createVehicle,
+  model3HighRes,
+  model3LowRes
+} from "./Car/Car";
 import { DEFAULT_KEYS_1 } from "./Car/CarControlKeys";
 import { CameraMode, VisualMode } from "./Config/VisualMode";
 
+import { observe } from "mobx";
 import { createTrack } from "./Environment/Track";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
+import { InitState, ModelQuality } from "./Store/ApplicationStore";
 import { rootStore } from "./Store/RootStore";
 import { updateVisual } from "./Utils/Visual";
 import { createEnvironment } from "./World/Environment";
@@ -38,17 +45,30 @@ export async function start() {
   createTrack(scene);
   animate();
 
+  observe(appStore, "modelQuality", change => {
+    switch (change.newValue) {
+      case ModelQuality.LOW:
+        loadCar(model3LowRes);
+        break;
+      case ModelQuality.HIGH:
+        loadCar(model3HighRes);
+        break;
+    }
+  });
+}
+
+async function loadCar(config: CarConfig) {
   const initCarPosition = new CANNON.Vec3(0, 4, 0);
+  appStore.setInitState(InitState.LOADING);
   vehicle = await createVehicle(
     initCarPosition,
     DEFAULT_KEYS_1,
     world,
     scene,
-    rootStore.carStore
+    rootStore.carStore,
+    config
   );
-
-  appStore.setIsLoading(false);
-  animate();
+  appStore.setInitState(InitState.READY);
 }
 
 function animate() {

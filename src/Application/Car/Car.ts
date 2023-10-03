@@ -38,8 +38,6 @@ export const model3LowRes: CarConfig = {
   track: 1.58
 };
 
-const currentCarModel = model3LowRes;
-
 const MAX_STEER = 0.5;
 export const MAX_FORCE = 1331;
 export const MAX_BREAK_FORCE = 100;
@@ -63,13 +61,14 @@ export async function createVehicle(
   controlKeys: CarControlKeys,
   world: CANNON.World,
   scene: THREE.Scene,
-  carStore: CarStore
+  carStore: CarStore,
+  currentCarModel: CarConfig
 ): Promise<CANNON.RaycastVehicle> {
   const chassisModel = await loadModel(currentCarModel.chassisModel);
   const wheelModel = await loadModel(wheelModelFile);
 
-  const vehicle = setupChassis(position, scene, chassisModel);
-  setupWheels(vehicle, world, scene, wheelModel);
+  const vehicle = setupChassis(position, scene, currentCarModel, chassisModel);
+  setupWheels(vehicle, world, scene, currentCarModel, wheelModel);
 
   vehicle.addToWorld(world);
 
@@ -98,9 +97,10 @@ function observeStore(carStore: CarStore, vehicle: CANNON.RaycastVehicle) {
 function setupChassis(
   position: CANNON.Vec3,
   scene: THREE.Scene,
+  currentCarModel: CarConfig,
   chassisModel?: THREE.Group
 ): CANNON.RaycastVehicle {
-  const chassisBoxSize = getChassisSize(chassisModel);
+  const chassisBoxSize = getChassisSize(currentCarModel, chassisModel);
   const chassisShape = new CANNON.Box(
     new CANNON.Vec3(
       chassisBoxSize.x / 2,
@@ -122,7 +122,10 @@ function setupChassis(
   return vehicle;
 }
 
-function getChassisSize(chassisModel?: THREE.Group): THREE.Vector3 {
+function getChassisSize(
+  currentCarModel: CarConfig,
+  chassisModel?: THREE.Group
+): THREE.Vector3 {
   if (chassisModel) {
     let chassisBoxSize = getBoundingBoxSize(chassisModel);
     const scale = currentCarModel.length / chassisBoxSize.x;
@@ -141,9 +144,10 @@ function setupWheels(
   vehicle: CANNON.RaycastVehicle,
   world: CANNON.World,
   scene: THREE.Scene,
+  currentCarModel: CarConfig,
   wheelModel?: THREE.Group
 ) {
-  setupWheelsInfo(vehicle);
+  setupWheelsInfo(vehicle, currentCarModel);
 
   const wheelMaterial = new CANNON.Material("wheel");
   const wheelBodies: CANNON.Body[] = [];
@@ -183,7 +187,10 @@ function setupWheels(
   });
 }
 
-function setupWheelsInfo(vehicle: CANNON.RaycastVehicle) {
+function setupWheelsInfo(
+  vehicle: CANNON.RaycastVehicle,
+  currentCarModel: CarConfig
+) {
   const vehicleBody = vehicle.chassisBody;
   const OVERALL_HEIGHT =
     vehicleBody.aabb.upperBound.y - vehicleBody.aabb.lowerBound.y;
