@@ -11,36 +11,51 @@ import { loadModel } from "../Utils/Loader";
 import { addVisual, pushVisual } from "../Utils/Visual";
 import { CarControlKeys } from "./CarControlKeys";
 
-const model3HighRes: CarConfig = {
+export const model3HighRes: CarConfig = {
   chassisModel: chassisModelFile,
-  overhangOffset: 0.06 // this is just adjust visually
+  weight: 1611,
+  length: 4.694,
+  width: 2.088,
+  overallHeight: 1.445,
+  groundClearance: 0.14,
+  chassisHeight: 1.445 - 0.14,
+  wheelRadius: 0.3353,
+  overhangFront: 0.841 - 0.06, // 0.06 is just adjust visually
+  overhangRear: 0.978 + 0.06,
+  track: 1.58
 };
-const model3LowRes: CarConfig = {
+export const model3LowRes: CarConfig = {
   chassisModel: chassisLowResModelFile,
-  overhangOffset: 0.0
+  weight: 1611,
+  length: 4.694,
+  width: 2.088,
+  overallHeight: 1.445,
+  groundClearance: 0.14,
+  chassisHeight: 1.445 - 0.14,
+  wheelRadius: 0.3353,
+  overhangFront: 0.841,
+  overhangRear: 0.978,
+  track: 1.58
 };
 
 const currentCarModel = model3LowRes;
-
-const WEIGHT = 1611;
-const LENGTH = 4.694;
-const WIDTH = 2.088;
-const OVERALL_HEIGHT = 1.445;
-const GROUND_CLEARANCE = 0.14;
-const CHASSIS_HEIGHT = OVERALL_HEIGHT - GROUND_CLEARANCE;
-const WHEEL_RADIUS = 0.3353;
-const overhang_offset = currentCarModel.overhangOffset;
-const OVERHANG_FRONT = 0.841 - overhang_offset;
-const OVERHANG_REAR = 0.978 + overhang_offset;
-const TRACK = 1.58;
 
 const MAX_STEER = 0.5;
 export const MAX_FORCE = 1331;
 export const MAX_BREAK_FORCE = 100;
 
-interface CarConfig {
+export interface CarConfig {
   chassisModel: string;
-  overhangOffset: number;
+  weight: number;
+  length: number;
+  width: number;
+  overallHeight: number;
+  groundClearance: number;
+  chassisHeight: number;
+  wheelRadius: number;
+  overhangFront: number;
+  overhangRear: number;
+  track: number;
 }
 
 export async function createVehicle(
@@ -89,11 +104,11 @@ function setupChassis(
   const chassisShape = new CANNON.Box(
     new CANNON.Vec3(
       chassisBoxSize.x / 2,
-      chassisBoxSize.y / 2 - GROUND_CLEARANCE / 2,
+      chassisBoxSize.y / 2 - currentCarModel.groundClearance / 2,
       chassisBoxSize.z / 2
     )
   );
-  const chassisBody = new CANNON.Body({ mass: WEIGHT });
+  const chassisBody = new CANNON.Body({ mass: currentCarModel.weight });
   chassisBody.addShape(chassisShape);
   chassisBody.position.copy(position);
   chassisBody.quaternion.setFromEuler(0, Math.PI, 0);
@@ -110,11 +125,15 @@ function setupChassis(
 function getChassisSize(chassisModel?: THREE.Group): THREE.Vector3 {
   if (chassisModel) {
     let chassisBoxSize = getBoundingBoxSize(chassisModel);
-    const scale = LENGTH / chassisBoxSize.x;
+    const scale = currentCarModel.length / chassisBoxSize.x;
     chassisModel.scale.set(scale, scale, scale);
     return getBoundingBoxSize(chassisModel);
   } else {
-    return new THREE.Vector3(LENGTH, CHASSIS_HEIGHT, WIDTH);
+    return new THREE.Vector3(
+      currentCarModel.length,
+      currentCarModel.chassisHeight,
+      currentCarModel.width
+    );
   }
 }
 
@@ -168,13 +187,12 @@ function setupWheelsInfo(vehicle: CANNON.RaycastVehicle) {
   const vehicleBody = vehicle.chassisBody;
   const OVERALL_HEIGHT =
     vehicleBody.aabb.upperBound.y - vehicleBody.aabb.lowerBound.y;
-  const CHASSIS_HEIGHT = OVERALL_HEIGHT - GROUND_CLEARANCE;
   const wheelOptions = {
-    radius: WHEEL_RADIUS,
+    radius: currentCarModel.wheelRadius,
     directionLocal: new CANNON.Vec3(0, -1, 0),
     suspensionStiffness: 30,
     // Cannot find from spec, assume it contribute half clearance
-    suspensionRestLength: GROUND_CLEARANCE,
+    suspensionRestLength: currentCarModel.groundClearance,
     frictionSlip: 1.4,
     dampingRelaxation: 2.3,
     dampingCompression: 4.4,
@@ -186,10 +204,16 @@ function setupWheelsInfo(vehicle: CANNON.RaycastVehicle) {
     customSlidingRotationalSpeed: -30,
     useCustomSlidingRotationalSpeed: true
   };
-  const xFrontPosition = LENGTH / 2 - OVERHANG_FRONT;
-  const xRearPosition = LENGTH / 2 - OVERHANG_REAR;
-  const yOffset = -(OVERALL_HEIGHT / 2 - WHEEL_RADIUS + GROUND_CLEARANCE);
-  const zOffset = TRACK / 2;
+  const xFrontPosition =
+    currentCarModel.length / 2 - currentCarModel.overhangFront;
+  const xRearPosition =
+    currentCarModel.length / 2 - currentCarModel.overhangRear;
+  const yOffset = -(
+    OVERALL_HEIGHT / 2 -
+    currentCarModel.wheelRadius +
+    currentCarModel.groundClearance
+  );
+  const zOffset = currentCarModel.track / 2;
 
   wheelOptions.chassisConnectionPointLocal.set(
     -xFrontPosition,
