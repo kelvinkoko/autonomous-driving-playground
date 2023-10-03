@@ -6,7 +6,7 @@ export enum CameraMode {
 
 export const VisualMode = {
   showModel: true,
-  showBody: true,
+  showBody: false,
   showGroundGrid: true,
   cameraMode: CameraMode.FOLLOW
 };
