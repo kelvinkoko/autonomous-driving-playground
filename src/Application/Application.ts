@@ -45,6 +45,10 @@ export async function start() {
   createTrack(scene);
   animate();
 
+  waitForModelSelection();
+}
+
+function waitForModelSelection() {
   observe(appStore, "modelQuality", change => {
     switch (change.newValue) {
       case ModelQuality.LOW:
