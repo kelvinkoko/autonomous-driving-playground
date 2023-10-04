@@ -17,19 +17,20 @@ export function createBlock() {
 }
 
 export function createStraightRoad() {
-  const boundary = new THREE.BoxGeometry(
+  const planeGeometry = new THREE.BoxGeometry(
     ROAD_BLOCK_SIZE,
     BLOCK_HEIGHT,
-    BOUNDARY_WIDTH
+    ROAD_BLOCK_SIZE
   );
-  const leftBoundary = new THREE.Mesh(boundary, material);
-  const rightBoundary = new THREE.Mesh(boundary, material);
-  leftBoundary.position.set(0, 0, -ROAD_BLOCK_SIZE / 2 + BOUNDARY_WIDTH / 2);
-  rightBoundary.position.set(0, 0, ROAD_BLOCK_SIZE / 2 - BOUNDARY_WIDTH / 2);
-  const group = new THREE.Group();
-  group.add(leftBoundary);
-  group.add(rightBoundary);
-  return group;
+  const plane = new THREE.Mesh(planeGeometry, material);
+  const ROAD_WIDTH = ROAD_BLOCK_SIZE - BOUNDARY_WIDTH * 2;
+  const roadGeometry = new THREE.BoxGeometry(
+    ROAD_BLOCK_SIZE,
+    BLOCK_HEIGHT,
+    ROAD_WIDTH
+  );
+  const road = new THREE.Mesh(roadGeometry, material);
+  return CSG.subtract(plane, road);
 }
 
 export function createCurveRoad() {
