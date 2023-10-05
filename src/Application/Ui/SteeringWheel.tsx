@@ -24,10 +24,10 @@ const SteeringWheel = observer(() => {
     initialAngleRad = Math.atan2(clientY - center.y, clientX - center.x);
     initialSteeringRad = carStore.steeringRad;
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleEnd);
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", handleTouchEnd);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleEnd);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleTouchEnd);
   };
 
   const handleMove = (clientX: number, clientY: number) => {
@@ -46,10 +46,10 @@ const SteeringWheel = observer(() => {
   };
 
   const handleEnd = () => {
-    window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", handleEnd);
-    window.removeEventListener("touchmove", handleTouchMove);
-    window.removeEventListener("touchend", handleTouchEnd);
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleEnd);
+    document.removeEventListener("touchmove", handleTouchMove);
+    document.removeEventListener("touchend", handleTouchEnd);
   };
 
   const handleMouseMove = (e: MouseEvent) => {

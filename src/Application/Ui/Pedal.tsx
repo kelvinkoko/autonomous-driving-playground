@@ -25,8 +25,8 @@ const Pedal = ({
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     handleDrag(e.clientY);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
@@ -34,8 +34,8 @@ const Pedal = ({
   };
 
   const handleMouseUp = () => {
-    window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", handleMouseUp);
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -44,8 +44,8 @@ const Pedal = ({
       return;
     }
     handleDrag(touch.clientY);
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", handleTouchEnd);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleTouchEnd);
   };
 
   const handleTouchMove = (e: TouchEvent) => {
@@ -57,8 +57,8 @@ const Pedal = ({
   };
 
   const handleTouchEnd = () => {
-    window.removeEventListener("touchmove", handleTouchMove);
-    window.removeEventListener("touchend", handleTouchEnd);
+    document.removeEventListener("touchmove", handleTouchMove);
+    document.removeEventListener("touchend", handleTouchEnd);
   };
 
   const handleDrag = (clientY: number) => {
