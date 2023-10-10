@@ -16,6 +16,7 @@ import { DEFAULT_KEYS_1 } from "./Car/CarControlKeys";
 import { CameraMode, VisualMode } from "./Config/VisualMode";
 
 import { observe } from "mobx";
+import { createRayLines, detectNearestObjects } from "./Car/DistanceSensing";
 import { createTrack } from "./Environment/Track";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
@@ -25,6 +26,7 @@ import { updateVisual } from "./Utils/Visual";
 import { createEnvironment } from "./World/Environment";
 
 const appStore = rootStore.applicationStore;
+const carStore = rootStore.carStore;
 
 const scene = new THREE.Scene();
 const camera = setupCamera();
@@ -43,6 +45,10 @@ export async function start() {
   createSky(scene);
   createGround(world, scene);
   createTrack(scene);
+  if (VisualMode.showSensing) {
+    createRayLines(scene);
+  }
+
   animate();
 
   waitForModelSelection();
@@ -52,12 +58,13 @@ function waitForModelSelection() {
   observe(appStore, "modelQuality", change => {
     switch (change.newValue) {
       case ModelQuality.LOW:
-        loadCar(model3LowRes);
+        carStore.setCarConfig(model3LowRes);
         break;
       case ModelQuality.HIGH:
-        loadCar(model3HighRes);
+        carStore.setCarConfig(model3HighRes);
         break;
     }
+    loadCar(carStore.carConfig);
   });
 }
 
@@ -89,6 +96,7 @@ function updatePhysics() {
   world.fixedStep();
   if (vehicle) {
     rootStore.carStore.setSpeed(vehicle.chassisBody.velocity.length());
+    const result = detectNearestObjects(scene, vehicle, carStore.carConfig);
   }
 }
 

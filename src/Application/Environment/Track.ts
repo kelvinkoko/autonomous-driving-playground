@@ -1,5 +1,9 @@
 import * as THREE from "three";
 import {
+  DetectionObjectType,
+  SENSIBLE_OBJECT_LAYER
+} from "../Car/DistanceSensing";
+import {
   ROAD_BLOCK_SIZE,
   createBlock,
   createCurveRoad,
@@ -43,7 +47,9 @@ export function createTrack(scene: THREE.Scene) {
           break;
       }
       if (road) {
+        road.userData.type = DetectionObjectType.TRACK;
         road.position.set(ROAD_BLOCK_SIZE * x, 0, ROAD_BLOCK_SIZE * y);
+        road.layers.enable(SENSIBLE_OBJECT_LAYER);
         scene.add(road);
       }
     }
