@@ -2,7 +2,6 @@ import * as React from "react";
 import ForcePedalImage from "../Assets/Images/force-pedal.png";
 import StoreContext from "../Store/StoreContext";
 import Pedal from "./Pedal";
-import { MAX_FORCE } from "../Car/Car";
 
 const ForcePedal = () => {
   const rootStore = React.useContext(StoreContext);
@@ -11,7 +10,7 @@ const ForcePedal = () => {
   return (
     <Pedal
       min={0}
-      max={MAX_FORCE}
+      max={1}
       onChange={carStore.applyForce}
       thumbImage={ForcePedalImage}
       imageWidthPx={30}

@@ -1,6 +1,5 @@
 import * as React from "react";
 import BrakePedalImage from "../Assets/Images/brake-pedal.png";
-import { MAX_BREAK_FORCE } from "../Car/Car";
 import StoreContext from "../Store/StoreContext";
 import Pedal from "./Pedal";
 
@@ -11,7 +10,7 @@ const BrakePedal = () => {
   return (
     <Pedal
       min={0}
-      max={MAX_BREAK_FORCE}
+      max={1}
       onChange={carStore.applyBrake}
       thumbImage={BrakePedalImage}
       imageWidthPx={26}

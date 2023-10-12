@@ -20,10 +20,13 @@ export class CarStore {
     this.steeringRad = steeringRad;
   }
 
+  // value is from -1 (-100%) to 1 (100%) of the maximum engine force of that car
+  // negative mean the car move backward
   applyForce = (value: number) => {
     this.applyingForce = value;
   };
 
+  // value is from 0 to 1 of the maximum brake force of that car
   applyBrake = (value: number) => {
     this.applyingBrake = value;
   };

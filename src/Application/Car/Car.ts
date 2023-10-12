@@ -39,8 +39,8 @@ export const model3LowRes: CarConfig = {
 };
 
 const MAX_STEER = 0.5;
-export const MAX_FORCE = 1331;
-export const MAX_BREAK_FORCE = 100;
+const MAX_FORCE = 1331;
+const MAX_BREAK_FORCE = 100;
 
 export interface CarConfig {
   chassisModel: string;
@@ -73,7 +73,7 @@ export async function createVehicle(
   vehicle.addToWorld(world);
 
   observeStore(carStore, vehicle);
-  bindKeyEvent(vehicle, controlKeys, carStore);
+  bindKeyEvent(controlKeys, carStore);
   return vehicle;
 }
 
@@ -83,14 +83,14 @@ function observeStore(carStore: CarStore, vehicle: CANNON.RaycastVehicle) {
     vehicle.setSteeringValue(-change.newValue, 1);
   });
   observe(carStore, "applyingForce", change => {
-    vehicle.applyEngineForce(-change.newValue, 2);
-    vehicle.applyEngineForce(-change.newValue, 3);
+    vehicle.applyEngineForce(-change.newValue * MAX_FORCE, 2);
+    vehicle.applyEngineForce(-change.newValue * MAX_FORCE, 3);
   });
   observe(carStore, "applyingBrake", change => {
-    vehicle.setBrake(change.newValue, 0);
-    vehicle.setBrake(change.newValue, 1);
-    vehicle.setBrake(change.newValue, 2);
-    vehicle.setBrake(change.newValue, 3);
+    vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 0);
+    vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 1);
+    vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 2);
+    vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 3);
   });
 }
 
@@ -290,20 +290,16 @@ function getBoundingBoxSize(model: THREE.Group): THREE.Vector3 {
   return box.getSize(new THREE.Vector3());
 }
 
-function bindKeyEvent(
-  vehicle: CANNON.RaycastVehicle,
-  keys: CarControlKeys,
-  carStore: CarStore
-) {
+function bindKeyEvent(keys: CarControlKeys, carStore: CarStore) {
   // Add force on keydown
   document.addEventListener("keydown", event => {
     switch (event.key) {
       case keys.applyForceKey:
-        carStore.applyForce(MAX_FORCE);
+        carStore.applyForce(1);
         break;
 
       case keys.applyBackwardForceKey:
-        carStore.applyForce(-MAX_FORCE);
+        carStore.applyForce(-1);
         break;
 
       case keys.steerLeft:
@@ -315,7 +311,7 @@ function bindKeyEvent(
         break;
 
       case keys.applyBreak:
-        carStore.applyBrake(MAX_BREAK_FORCE);
+        carStore.applyBrake(1);
         break;
     }
   });
