@@ -1,11 +1,12 @@
 import * as React from "react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { getTouchPoint } from "../Utils/TouchUtil";
 import styles from "./Pedal.css";
 
 interface Props {
   max: number;
   min: number;
+  value: number;
   thumbImage: string;
   imageWidthPx: number;
   imageHeightPx: number;
@@ -15,12 +16,12 @@ interface Props {
 const Pedal = ({
   max,
   min,
+  value,
   thumbImage,
   imageWidthPx,
   imageHeightPx,
   onChange
 }: Props) => {
-  const [value, setValue] = useState(min);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -70,7 +71,6 @@ const Pedal = ({
       );
       const percentage = (dragY - rect.top) / rect.height;
       const newValue = min + (max - min) * percentage;
-      setValue(Math.min(Math.max(newValue, min), max));
       if (onChange) {
         onChange(newValue);
       }
