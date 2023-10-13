@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { CarConfig, model3LowRes } from "../Car/Car";
+import { DetectionResult } from "../Car/DistanceSensing";
 
 export class CarStore {
   speedMS: number = 0;
@@ -7,6 +8,7 @@ export class CarStore {
   applyingForce: number = 0;
   applyingBrake: number = 0;
   carConfig: CarConfig = model3LowRes;
+  detectionResult: Array<DetectionResult> = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -33,5 +35,9 @@ export class CarStore {
 
   setCarConfig = (config: CarConfig) => {
     this.carConfig = config;
+  };
+
+  setDetectionResult = (result: DetectionResult[]) => {
+    this.detectionResult = result;
   };
 }

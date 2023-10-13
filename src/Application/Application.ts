@@ -97,6 +97,7 @@ function updatePhysics() {
   if (vehicle) {
     rootStore.carStore.setSpeed(vehicle.chassisBody.velocity.length());
     const result = detectNearestObjects(scene, vehicle, carStore.carConfig);
+    rootStore.carStore.setDetectionResult(result);
   }
 }
 
