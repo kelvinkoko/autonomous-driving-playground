@@ -1,9 +1,10 @@
 .darkPanel {
-  background: rgba(64, 64, 64, 0.31);
+  background: rgba(0, 0, 0, 0.84);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(8.5px);
-  -webkit-backdrop-filter: blur(8.5px);
+  backdrop-filter: blur(6.5px);
+  -webkit-backdrop-filter: blur(6.5px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .grayPanel {

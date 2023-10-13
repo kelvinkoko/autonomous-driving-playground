@@ -6,6 +6,7 @@ import BrakePedal from "./BrakePedal";
 import ForcePedal from "./ForcePedal";
 import glassStyles from "./GlassPanels.css";
 import ModelSelection from "./ModelSelection";
+import SensingDisplay from "./SensingDisplay";
 import SpeedDisplay from "./SpeedDisplay";
 import SteeringWheel from "./SteeringWheel";
 import styles from "./Ui.css";
@@ -38,6 +39,9 @@ const Content = () => {
     <React.Fragment>
       <div className={`${glassStyles.grayPanel} ${styles.speedPanel}`}>
         <SpeedDisplay />
+      </div>
+      <div className={`${glassStyles.darkPanel} ${styles.sensingPanel}`}>
+        <SensingDisplay />
       </div>
       <div className={`${glassStyles.whitePanel} ${styles.steeringPanel}`}>
         <SteeringWheel />
