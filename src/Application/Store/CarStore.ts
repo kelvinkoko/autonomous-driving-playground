@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { CarConfig, model3LowRes } from "../Car/Car";
-import { DetectionResult } from "../Car/DistanceSensing";
+import { DetectionResult } from "../Car/DetectionResult";
 
 export class CarStore {
   speedMS: number = 0;

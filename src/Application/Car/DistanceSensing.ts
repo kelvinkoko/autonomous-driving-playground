@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { VisualMode } from "../Config/VisualMode";
 import { toThreeQuaternion } from "../Utils/Conversion";
 import { CarConfig } from "./Car";
+import { DetectionResult } from "./DetectionResult";
 
 const MAX_SENSING_DISTANCE = 5;
 export const SENSIBLE_OBJECT_LAYER = 1;
@@ -11,21 +12,6 @@ const raycaster = new THREE.Raycaster();
 raycaster.layers.set(SENSIBLE_OBJECT_LAYER);
 
 const rayLines: THREE.Line[] = [];
-
-export enum DetectionObjectType {
-  TRACK
-}
-
-export interface DetectionResult {
-  // Position of the position of the ray
-  position: THREE.Vector3;
-  // Direction vector of the ray cast to
-  direction: THREE.Vector3;
-  // object detected
-  object: DetectionObjectType | null;
-  // distance of that object
-  distance: number;
-}
 
 export function detectNearestObjects(
   scene: THREE.Scene,
