@@ -319,27 +319,23 @@ function bindKeyEvent(keys: CarControlKeys, carStore: CarStore) {
   // Reset force on keyup
   document.addEventListener("keyup", event => {
     switch (event.key) {
-      case "w":
-      case "ArrowUp":
+      case keys.applyForceKey:
         carStore.applyForce(0);
         break;
 
-      case "s":
-      case "ArrowDown":
+      case keys.applyBackwardForceKey:
         carStore.applyForce(0);
         break;
 
-      case "a":
-      case "ArrowLeft":
+      case keys.steerLeft:
         carStore.setSteering(0);
         break;
 
-      case "d":
-      case "ArrowRight":
+      case keys.steerRight:
         carStore.setSteering(0);
         break;
 
-      case "b":
+      case keys.applyBreak:
         carStore.applyBrake(0);
         break;
     }
