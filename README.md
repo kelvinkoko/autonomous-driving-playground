@@ -39,3 +39,9 @@ Model 3's 3D model
 - HRD Image:
 
 [Environment map](https://polyhaven.com/a/skidpan) (CC0)
+
+- UI Image:
+
+[Steering icons created by Andrejs Kirma - Flaticon](https://www.flaticon.com/free-icons/steering)
+
+[Pedal icons created by berkahicon - Flaticon](https://www.flaticon.com/free-icons/pedal)
