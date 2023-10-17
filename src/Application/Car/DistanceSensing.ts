@@ -116,7 +116,7 @@ function findNearestObject(
   return {
     position,
     direction,
-    object: nearestObject?.userData?.type,
+    object: nearestObject ? nearestObject.userData.type : null,
     distance: nearestDistance
   };
 }
