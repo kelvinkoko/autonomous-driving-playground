@@ -16,6 +16,7 @@ import { DEFAULT_KEYS_1 } from "./Car/CarControlKeys";
 import { CameraMode, VisualMode } from "./Config/VisualMode";
 
 import { observe } from "mobx";
+import { DetectionResult } from "./Car/DetectionResult";
 import { createRayLines, detectNearestObjects } from "./Car/DistanceSensing";
 import { createTrack } from "./Environment/Track";
 import { createGround } from "./Ground";
@@ -86,10 +87,45 @@ function animate() {
   requestAnimationFrame(animate);
 
   updatePhysics();
+  updateVehicle();
   updateVisual();
   updateCamera();
 
   renderer.render(scene, camera);
+}
+
+function updateVehicle() {
+  if (!vehicle) {
+    return;
+  }
+  const detectionResult = carStore.detectionResult;
+  const action = runSelfDrive(detectionResult);
+  carStore.applyForce(action.force);
+  carStore.applyBrake(action.brake);
+  carStore.setSteering(action.steering);
+}
+
+let drive: (_: DetectionResult[]) => DriveAction;
+eval(`
+drive = (detectionResult) => {
+  const diff = detectionResult[1].distance - detectionResult[7].distance;
+  const steering = Math.max(-0.7, Math.min(diff, 0.7));
+  return {
+    force: 0.4,
+    brake: 0,
+    steering
+  };
+}
+`);
+
+function runSelfDrive(detectionResult: DetectionResult[]): DriveAction {
+  return drive(detectionResult);
+}
+
+interface DriveAction {
+  force: number;
+  brake: number;
+  steering: number;
 }
 
 function updatePhysics() {
