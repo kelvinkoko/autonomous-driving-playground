@@ -3,9 +3,9 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { toThreeQuaternion, toThreeVector3 } from "./Utils/Conversion";
 
-export function setupCamera() {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
+export function setupCamera(container: HTMLElement) {
+  const width = container.clientWidth;
+  const height = container.clientHeight;
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
   camera.position.set(-5, 1, 0);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -27,7 +27,7 @@ export function setupOrbitControls(
 }
 
 export function updateCameraFollow(
-  camera: THREE.PerspectiveCamera,
+  camera: THREE.Camera,
   controls: OrbitControls,
   vehicle: CANNON.RaycastVehicle,
   offsetDistance: number = 10
@@ -53,7 +53,7 @@ export function updateCameraFollow(
 }
 
 export function updateCameraFollowBehind(
-  camera: THREE.PerspectiveCamera,
+  camera: THREE.Camera,
   controls: OrbitControls,
   vehicle: CANNON.RaycastVehicle,
   offsetDistance: number = 12,

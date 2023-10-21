@@ -16,6 +16,7 @@ import { DEFAULT_KEYS_1 } from "./Car/CarControlKeys";
 import { CameraMode, VisualMode } from "./Config/VisualMode";
 
 import { observe } from "mobx";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { DetectionResult } from "./Car/DetectionResult";
 import { createRayLines, detectNearestObjects } from "./Car/DistanceSensing";
 import { createTrack } from "./Environment/Track";
@@ -29,19 +30,20 @@ import { createEnvironment } from "./World/Environment";
 const appStore = rootStore.applicationStore;
 const carStore = rootStore.carStore;
 
-const scene = new THREE.Scene();
-const camera = setupCamera();
-const renderer = setupRenderer();
-const controls = setupOrbitControls(camera, renderer);
-
 const world = new CANNON.World({
   gravity: new CANNON.Vec3(0, -9.82, 0)
 });
 let vehicle: CANNON.RaycastVehicle;
 
-window.addEventListener("resize", onWindowResize, false);
-
 export async function start() {
+  const container = getContainer();
+
+  const scene = new THREE.Scene();
+  const camera = setupCamera(container);
+  const renderer = setupRenderer(container);
+  const controls = setupOrbitControls(camera, renderer);
+  setupOnResize(container, renderer, camera);
+
   createEnvironment(scene, renderer);
   createSky(scene);
   createGround(world, scene);
@@ -50,12 +52,12 @@ export async function start() {
     createRayLines(scene);
   }
 
-  animate();
+  animate(renderer, scene, camera, controls);
 
-  waitForModelSelection();
+  waitForModelSelection(scene);
 }
 
-function waitForModelSelection() {
+function waitForModelSelection(scene: THREE.Scene) {
   observe(appStore, "modelQuality", change => {
     switch (change.newValue) {
       case ModelQuality.LOW:
@@ -65,11 +67,11 @@ function waitForModelSelection() {
         carStore.setCarConfig(model3HighRes);
         break;
     }
-    loadCar(carStore.carConfig);
+    loadCar(carStore.carConfig, scene);
   });
 }
 
-async function loadCar(config: CarConfig) {
+async function loadCar(config: CarConfig, scene: THREE.Scene) {
   const initCarPosition = new CANNON.Vec3(0, 4, 0);
   appStore.setInitState(InitState.LOADING);
   vehicle = await createVehicle(
@@ -83,13 +85,20 @@ async function loadCar(config: CarConfig) {
   appStore.setInitState(InitState.READY);
 }
 
-function animate() {
-  requestAnimationFrame(animate);
+function animate(
+  renderer: THREE.WebGLRenderer,
+  scene: THREE.Scene,
+  camera: THREE.Camera,
+  controls: OrbitControls
+) {
+  requestAnimationFrame(() => {
+    animate(renderer, scene, camera, controls);
+  });
 
-  updatePhysics();
+  updatePhysics(scene);
   updateVehicle();
   updateVisual();
-  updateCamera();
+  updateCamera(camera, controls);
 
   renderer.render(scene, camera);
 }
@@ -128,7 +137,7 @@ interface DriveAction {
   steering: number;
 }
 
-function updatePhysics() {
+function updatePhysics(scene: THREE.Scene) {
   world.fixedStep();
   if (vehicle) {
     rootStore.carStore.setSpeed(vehicle.chassisBody.velocity.length());
@@ -137,7 +146,7 @@ function updatePhysics() {
   }
 }
 
-function updateCamera() {
+function updateCamera(camera: THREE.Camera, controls: OrbitControls) {
   if (!vehicle) {
     return;
   }
@@ -152,20 +161,44 @@ function updateCamera() {
     // No action
   }
 }
-
-function setupRenderer() {
+function setupRenderer(container: HTMLElement) {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  const container = document.getElementById("canvas");
-  container?.appendChild(renderer.domElement);
+  container.appendChild(renderer.domElement);
   return renderer;
 }
 
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
+function setupOnResize(
+  container: HTMLElement,
+  renderer: THREE.WebGLRenderer,
+  camera: THREE.PerspectiveCamera
+) {
+  window.addEventListener(
+    "resize",
+    () => {
+      onWindowResize(container, renderer, camera);
+    },
+    false
+  );
+}
+
+function onWindowResize(
+  container: HTMLElement,
+  renderer: THREE.WebGLRenderer,
+  camera: THREE.PerspectiveCamera
+) {
+  camera.aspect = container.clientWidth / container.clientHeight;
   camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(container.clientWidth, container.clientHeight);
+}
+
+function getContainer(): HTMLElement {
+  const container = document.getElementById("canvas");
+  if (!container) {
+    throw Error("Fail to get canvas");
+  }
+  return container;
 }
