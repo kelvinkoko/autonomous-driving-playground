@@ -16,42 +16,10 @@
         max-height: -webkit-fill-available;
         max-height: fill-available;
       }
-      #canvas {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-      }
-      #overlay-ui {
-        position: absolute;
-        pointer-events: none;
-        height: 100%;
-        width: 100%;
-      }
-      #container {
-        display: flex;
-        height: 100vh;
-        max-height: -moz-available;
-        max-height: -webkit-fill-available;
-        max-height: fill-available;
-      }
-      #main {
-        flex: 1;
-        position: relative;
-      }
-      #menu {
-        width: 20%;
-        background-color: #333;
-      }
     </style>
   </head>
 
   <body>
-    <div id="container">
-      <div id="main">
-        <div id="canvas"></div>
-        <div id="overlay-ui"></div>
-      </div>
-      <div id="menu">Test</div>
-    </div>
+    <div id="root"></div>
   </body>
 </html>

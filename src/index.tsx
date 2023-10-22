@@ -1,16 +1,13 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
-import { start } from "./Application/Application";
+import App from "./Application/App";
 import { rootStore } from "./Application/Store/RootStore";
 import StoreContext from "./Application/Store/StoreContext";
-import Ui from "./Application/Ui/Ui";
 
-start();
-
-const root = createRoot(document.getElementById("overlay-ui")!);
+const root = createRoot(document.getElementById("root")!);
 root.render(
   <StoreContext.Provider value={rootStore}>
-    <Ui />
+    <App />
   </StoreContext.Provider>
 );
 

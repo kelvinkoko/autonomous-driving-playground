@@ -1,0 +1,26 @@
+.canvas {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+.overlayUi {
+  position: absolute;
+  pointer-events: none;
+  height: 100%;
+  width: 100%;
+}
+.container {
+  display: flex;
+  height: 100vh;
+  max-height: -moz-available;
+  max-height: -webkit-fill-available;
+  max-height: fill-available;
+}
+.main {
+  flex: 1;
+  position: relative;
+}
+.menu {
+  width: 20%;
+  background-color: #333;
+}

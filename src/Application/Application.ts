@@ -35,9 +35,7 @@ const world = new CANNON.World({
 });
 let vehicle: CANNON.RaycastVehicle;
 
-export async function start() {
-  const container = getContainer();
-
+export async function start(container: HTMLElement) {
   const scene = new THREE.Scene();
   const camera = setupCamera(container);
   const renderer = setupRenderer(container);
@@ -193,12 +191,4 @@ function onWindowResize(
   camera.updateProjectionMatrix();
 
   renderer.setSize(container.clientWidth, container.clientHeight);
-}
-
-function getContainer(): HTMLElement {
-  const container = document.getElementById("canvas");
-  if (!container) {
-    throw Error("Fail to get canvas");
-  }
-  return container;
 }
