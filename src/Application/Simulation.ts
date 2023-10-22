@@ -27,6 +27,8 @@ import { rootStore } from "./Store/RootStore";
 import { updateVisual } from "./Utils/Visual";
 import { createEnvironment } from "./World/Environment";
 
+const ENABLE_SELF_DRIVE = false;
+
 const appStore = rootStore.applicationStore;
 const carStore = rootStore.carStore;
 
@@ -106,10 +108,12 @@ function updateVehicle() {
     return;
   }
   const detectionResult = carStore.detectionResult;
-  const action = runSelfDrive(detectionResult);
-  carStore.applyForce(action.force);
-  carStore.applyBrake(action.brake);
-  carStore.setSteering(action.steering);
+  if (ENABLE_SELF_DRIVE) {
+    const action = runSelfDrive(detectionResult);
+    carStore.applyForce(action.force);
+    carStore.applyBrake(action.brake);
+    carStore.setSteering(action.steering);
+  }
 }
 
 let drive: (_: DetectionResult[]) => DriveAction;
