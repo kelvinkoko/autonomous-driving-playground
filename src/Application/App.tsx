@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import style from "./App.css";
-import { start } from "./Application";
+import { start } from "./Simulation";
 import Ui from "./Ui/Ui";
 
 const App = () => {
