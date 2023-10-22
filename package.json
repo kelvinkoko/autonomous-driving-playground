@@ -18,7 +18,6 @@
     "mobx-utils": "^6.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-split-pane": "^0.1.92",
     "three": "^0.155.0",
     "three-csg-ts": "^3.1.13",
     "webpack-dev-server": "^4.15.1"
