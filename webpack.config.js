@@ -35,8 +35,23 @@ const config = {
           {
             loader: "css-loader",
             options: {
-              importLoaders: 1,
-              modules: true
+              modules: {
+                localIdentName: "[name]__[local]__[hash:base64:5]",
+                getLocalIdent: (
+                  loaderContext,
+                  localIdentName,
+                  localName,
+                  options
+                ) => {
+                  if (
+                    loaderContext.resourcePath.includes("node_modules") ||
+                    loaderContext.resourceQuery.includes("global")
+                  ) {
+                    return localName;
+                  }
+                  return undefined; // let the original getLocalIdent handle
+                }
+              }
             }
           }
         ]

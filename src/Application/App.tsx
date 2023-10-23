@@ -1,7 +1,9 @@
+import { Allotment } from "allotment";
+import "allotment/dist/style.css?global";
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import style from "./App.css";
-import { start } from "./Simulation";
+import { onCanvasResize, start } from "./Simulation";
 import Ui from "./Ui/Ui";
 
 const App = () => {
@@ -14,13 +16,19 @@ const App = () => {
   }, []);
 
   return (
-    <div className={style.container}>
+    <Allotment
+      className={style.container}
+      defaultSizes={[80, 20]}
+      onChange={() => {
+        onCanvasResize?.();
+      }}
+    >
       <div className={style.main}>
         <div className={style.canvas} ref={canvasRef} />
         <Ui />
       </div>
       <div className={style.menu} />
-    </div>
+    </Allotment>
   );
 };
 

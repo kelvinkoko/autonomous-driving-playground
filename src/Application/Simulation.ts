@@ -38,6 +38,7 @@ const world = new CANNON.World({
 let vehicle: CANNON.RaycastVehicle;
 
 export async function start(container: HTMLElement) {
+  console.log(container.clientWidth, container.clientHeight);
   const scene = new THREE.Scene();
   const camera = setupCamera(container);
   const renderer = setupRenderer(container);
@@ -172,18 +173,17 @@ function setupRenderer(container: HTMLElement) {
   return renderer;
 }
 
+export let onCanvasResize: () => void | undefined;
+
 function setupOnResize(
   container: HTMLElement,
   renderer: THREE.WebGLRenderer,
   camera: THREE.PerspectiveCamera
 ) {
-  window.addEventListener(
-    "resize",
-    () => {
-      onWindowResize(container, renderer, camera);
-    },
-    false
-  );
+  onCanvasResize = () => {
+    onWindowResize(container, renderer, camera);
+  };
+  window.addEventListener("resize", onCanvasResize, false);
 }
 
 function onWindowResize(
