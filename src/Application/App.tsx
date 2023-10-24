@@ -4,6 +4,7 @@ import "allotment/dist/style.css?global";
 import { EditorView, basicSetup } from "codemirror";
 import * as React from "react";
 import { useEffect, useRef } from "react";
+import { dracula } from "thememirror";
 import style from "./App.css";
 import { onCanvasResize, start } from "./Simulation";
 import Ui from "./Ui/Ui";
@@ -18,7 +19,7 @@ const App = () => {
     }
     if (codeEditorRef.current) {
       const view = new EditorView({
-        extensions: [basicSetup, javascript()],
+        extensions: [basicSetup, javascript(), dracula],
         parent: codeEditorRef.current
       });
     }

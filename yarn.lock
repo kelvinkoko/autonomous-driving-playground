@@ -3672,6 +3672,11 @@ terser@^5.10.0, terser@^5.16.8:
     commander "^2.20.0"
     source-map-support "~0.5.20"
 
+thememirror@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/thememirror/-/thememirror-2.0.1.tgz#ae9eb4ce7e8d0303d4fbabcc860ed38a0b45b079"
+  integrity sha512-d5i6FVvWWPkwrm4cHLI3t9AT1OrkAt7Ig8dtdYSofgF7C/eiyNuq6zQzSTusWTde3jpW9WLvA9J/fzNKMUsd0w==
+
 three-csg-ts@^3.1.13:
   version "3.1.13"
   resolved "https://registry.yarnpkg.com/three-csg-ts/-/three-csg-ts-3.1.13.tgz#090eda7120185505d0433f8fa043529629df61c7"
