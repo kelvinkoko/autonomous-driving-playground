@@ -19,6 +19,7 @@
   position: relative;
   height: 100%;
 }
-.menu {
-  background-color: #333;
+.codePane {
+  background-color: #0e092c;
+  height: 100%;
 }

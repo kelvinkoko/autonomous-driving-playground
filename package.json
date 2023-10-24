@@ -12,8 +12,10 @@
     "build-prod": "webpack --mode production"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.1",
     "allotment": "^1.19.3",
     "cannon-es": "^0.20.0",
+    "codemirror": "^6.0.1",
     "mobx": "^6.10.2",
     "mobx-react": "^9.0.1",
     "mobx-utils": "^6.0.8",

@@ -1,5 +1,7 @@
+import { javascript } from "@codemirror/lang-javascript";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css?global";
+import { EditorView, basicSetup } from "codemirror";
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import style from "./App.css";
@@ -8,10 +10,17 @@ import Ui from "./Ui/Ui";
 
 const App = () => {
   const canvasRef = useRef(null);
+  const codeEditorRef = useRef(null);
   useEffect(() => {
     const canvasElement = canvasRef.current;
     if (canvasElement) {
       start(canvasElement);
+    }
+    if (codeEditorRef.current) {
+      const view = new EditorView({
+        extensions: [basicSetup, javascript()],
+        parent: codeEditorRef.current
+      });
     }
   }, []);
 
@@ -27,7 +36,9 @@ const App = () => {
         <div className={style.canvas} ref={canvasRef} />
         <Ui />
       </div>
-      <div className={style.menu} />
+      <div className={style.codePane}>
+        <div ref={codeEditorRef} />
+      </div>
     </Allotment>
   );
 };
