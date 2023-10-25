@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import SteeringWheelImage from "../Assets/Images/steering-wheel.png";
-import StoreContext from "../Store/StoreContext";
-import { getTouchPoint } from "../Utils/TouchUtil";
+import SteeringWheelImage from "../../Assets/Images/steering-wheel.png";
+import StoreContext from "../../Store/StoreContext";
+import { getTouchPoint } from "../../Utils/TouchUtil";
 
 const SteeringWheel = observer(() => {
   const rootStore = React.useContext(StoreContext);

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import * as React from "react";
-import ForcePedalImage from "../Assets/Images/force-pedal.png";
-import StoreContext from "../Store/StoreContext";
+import ForcePedalImage from "../../Assets/Images/force-pedal.png";
+import StoreContext from "../../Store/StoreContext";
 import Pedal from "./Pedal";
 
 const ForcePedal = observer(() => {

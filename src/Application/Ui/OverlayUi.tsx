@@ -2,14 +2,14 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { InitState } from "../Store/ApplicationStore";
 import StoreContext from "../Store/StoreContext";
-import BrakePedal from "./BrakePedal";
-import ForcePedal from "./ForcePedal";
+import BrakePedal from "./CarControl/BrakePedal";
+import ForcePedal from "./CarControl/ForcePedal";
+import SteeringWheel from "./CarControl/SteeringWheel";
 import glassStyles from "./GlassPanels.css";
 import ModelSelection from "./ModelSelection";
 import styles from "./OverlayUi.css";
 import SensingDisplay from "./SensingDisplay";
 import SpeedDisplay from "./SpeedDisplay";
-import SteeringWheel from "./SteeringWheel";
 
 const OverlayUi = observer(() => {
   const rootStore = React.useContext(StoreContext);
