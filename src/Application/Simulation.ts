@@ -38,7 +38,6 @@ const world = new CANNON.World({
 let vehicle: CANNON.RaycastVehicle;
 
 export async function start(container: HTMLElement) {
-  console.log(container.clientWidth, container.clientHeight);
   const scene = new THREE.Scene();
   const camera = setupCamera(container);
   const renderer = setupRenderer(container);
@@ -56,6 +55,9 @@ export async function start(container: HTMLElement) {
   animate(renderer, scene, camera, controls);
 
   waitForModelSelection(scene);
+  observe(appStore, "driveCode", change => {
+    eval(change.newValue);
+  });
 }
 
 function waitForModelSelection(scene: THREE.Scene) {
@@ -118,19 +120,11 @@ function updateVehicle() {
 }
 
 let drive: (_: DetectionResult[]) => DriveAction;
-eval(`
-drive = (detectionResult) => {
-  const diff = detectionResult[1].distance - detectionResult[7].distance;
-  const steering = Math.max(-0.7, Math.min(diff, 0.7));
-  return {
-    force: 0.4,
-    brake: 0,
-    steering
-  };
-}
-`);
 
 function runSelfDrive(detectionResult: DetectionResult[]): DriveAction {
+  if (!drive) {
+    return { force: 0, brake: 0, steering: 0 };
+  }
   return drive(detectionResult);
 }
 

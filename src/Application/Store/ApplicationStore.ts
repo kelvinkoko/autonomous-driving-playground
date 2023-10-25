@@ -3,6 +3,8 @@ import { makeAutoObservable } from "mobx";
 export class ApplicationStore {
   initState: InitState = InitState.MODEL_SELECTION;
   modelQuality: ModelQuality | undefined = undefined;
+  editorCode: string = "";
+  driveCode: string = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -14,6 +16,14 @@ export class ApplicationStore {
 
   setModelQuality(quality: ModelQuality) {
     this.modelQuality = quality;
+  }
+
+  setEditorCode(code: string) {
+    this.editorCode = code;
+  }
+
+  setDriveCode(code: string) {
+    this.driveCode = code;
   }
 }
 
