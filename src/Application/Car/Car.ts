@@ -295,22 +295,27 @@ function bindKeyEvent(keys: CarControlKeys, carStore: CarStore) {
   document.addEventListener("keydown", event => {
     switch (event.key) {
       case keys.applyForceKey:
+        carStore.setIsManualDriving(true);
         carStore.applyForce(1);
         break;
 
       case keys.applyBackwardForceKey:
+        carStore.setIsManualDriving(true);
         carStore.applyForce(-1);
         break;
 
       case keys.steerLeft:
         carStore.setSteering(-MAX_STEER);
+        carStore.setIsManualDriving(true);
         break;
 
       case keys.steerRight:
+        carStore.setIsManualDriving(true);
         carStore.setSteering(MAX_STEER);
         break;
 
       case keys.applyBreak:
+        carStore.setIsManualDriving(true);
         carStore.applyBrake(1);
         break;
     }
@@ -321,22 +326,27 @@ function bindKeyEvent(keys: CarControlKeys, carStore: CarStore) {
     switch (event.key) {
       case keys.applyForceKey:
         carStore.applyForce(0);
+        carStore.setIsManualDriving(false);
         break;
 
       case keys.applyBackwardForceKey:
         carStore.applyForce(0);
+        carStore.setIsManualDriving(false);
         break;
 
       case keys.steerLeft:
         carStore.setSteering(0);
+        carStore.setIsManualDriving(false);
         break;
 
       case keys.steerRight:
         carStore.setSteering(0);
+        carStore.setIsManualDriving(false);
         break;
 
       case keys.applyBreak:
         carStore.applyBrake(0);
+        carStore.setIsManualDriving(false);
         break;
     }
   });

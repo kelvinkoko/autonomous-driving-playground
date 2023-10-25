@@ -14,6 +14,7 @@ const SteeringWheel = observer(() => {
 
   const handleStart = (clientX: number, clientY: number) => {
     if (!wheelRef.current) return;
+    carStore.setIsManualDriving(true);
 
     const wheel = wheelRef.current;
     const rect = wheel.getBoundingClientRect();
@@ -50,6 +51,7 @@ const SteeringWheel = observer(() => {
     document.removeEventListener("mouseup", handleEnd);
     document.removeEventListener("touchmove", handleTouchMove);
     document.removeEventListener("touchend", handleTouchEnd);
+    carStore.setIsManualDriving(false);
   };
 
   const handleMouseMove = (e: MouseEvent) => {

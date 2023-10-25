@@ -14,6 +14,7 @@ const ForcePedal = observer(() => {
       max={1}
       value={carStore.applyingForce}
       onChange={carStore.applyForce}
+      setIsManualDriving={carStore.setIsManualDriving}
       thumbImage={ForcePedalImage}
       imageWidthPx={30}
       imageHeightPx={49}

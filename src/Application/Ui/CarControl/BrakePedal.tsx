@@ -14,6 +14,7 @@ const BrakePedal = observer(() => {
       max={1}
       value={carStore.applyingBrake}
       onChange={carStore.applyBrake}
+      setIsManualDriving={carStore.setIsManualDriving}
       thumbImage={BrakePedalImage}
       imageWidthPx={26}
       imageHeightPx={34}

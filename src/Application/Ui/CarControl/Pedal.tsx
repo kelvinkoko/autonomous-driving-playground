@@ -11,6 +11,7 @@ interface Props {
   imageWidthPx: number;
   imageHeightPx: number;
   onChange?: (value: number) => void;
+  setIsManualDriving: (value: boolean) => void;
 }
 
 const Pedal = ({
@@ -20,11 +21,13 @@ const Pedal = ({
   thumbImage,
   imageWidthPx,
   imageHeightPx,
-  onChange
+  onChange,
+  setIsManualDriving
 }: Props) => {
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsManualDriving(true);
     handleDrag(e.clientY);
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
@@ -37,6 +40,7 @@ const Pedal = ({
   const handleMouseUp = () => {
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
+    setIsManualDriving(false);
   };
 
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -44,6 +48,7 @@ const Pedal = ({
     if (!touch) {
       return;
     }
+    setIsManualDriving(true);
     handleDrag(touch.clientY);
     document.addEventListener("touchmove", handleTouchMove);
     document.addEventListener("touchend", handleTouchEnd);
@@ -60,6 +65,7 @@ const Pedal = ({
   const handleTouchEnd = () => {
     document.removeEventListener("touchmove", handleTouchMove);
     document.removeEventListener("touchend", handleTouchEnd);
+    setIsManualDriving(false);
   };
 
   const handleDrag = (clientY: number) => {

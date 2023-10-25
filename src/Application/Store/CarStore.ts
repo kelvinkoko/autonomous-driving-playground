@@ -9,6 +9,7 @@ export class CarStore {
   applyingBrake: number = 0;
   carConfig: CarConfig = model3LowRes;
   detectionResult: Array<DetectionResult> = [];
+  isManualDriving: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -39,5 +40,9 @@ export class CarStore {
 
   setDetectionResult = (result: DetectionResult[]) => {
     this.detectionResult = result;
+  };
+
+  setIsManualDriving = (isManual: boolean) => {
+    this.isManualDriving = isManual;
   };
 }
