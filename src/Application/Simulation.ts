@@ -19,6 +19,7 @@ import { observe } from "mobx";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { DetectionResult } from "./Car/DetectionResult";
 import { createRayLines, detectNearestObjects } from "./Car/DistanceSensing";
+import { ENABLE_CODE_EDITOR } from "./Config/FeatureFlag";
 import { createTrack } from "./Environment/Track";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
@@ -27,7 +28,7 @@ import { rootStore } from "./Store/RootStore";
 import { updateVisual } from "./Utils/Visual";
 import { createEnvironment } from "./World/Environment";
 
-const ENABLE_SELF_DRIVE = false;
+const ENABLE_SELF_DRIVE = ENABLE_CODE_EDITOR;
 
 const appStore = rootStore.applicationStore;
 const carStore = rootStore.carStore;

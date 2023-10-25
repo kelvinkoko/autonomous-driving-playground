@@ -3,6 +3,7 @@ import "allotment/dist/style.css?global";
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import style from "./App.css";
+import { ENABLE_CODE_EDITOR } from "./Config/FeatureFlag";
 import { onCanvasResize, start } from "./Simulation";
 import CodeEditor from "./Ui/CodeDev/CodeEditor";
 import DeployButton from "./Ui/CodeDev/DeployButton";
@@ -29,10 +30,10 @@ const App = () => {
         <div className={style.canvas} ref={canvasRef} />
         <OverlayUi />
       </div>
-      <div className={style.codePane}>
+      <Allotment.Pane className={style.codePane} visible={ENABLE_CODE_EDITOR}>
         <CodeEditor />
         <DeployButton />
-      </div>
+      </Allotment.Pane>
     </Allotment>
   );
 };
