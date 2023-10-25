@@ -3,9 +3,9 @@ import "allotment/dist/style.css?global";
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import style from "./App.css";
-import CodeEditor from "./CodeEditor";
-import { DeployButton } from "./DeployButton";
 import { onCanvasResize, start } from "./Simulation";
+import CodeEditor from "./Ui/CodeDev/CodeEditor";
+import DeployButton from "./Ui/CodeDev/DeployButton";
 import OverlayUi from "./Ui/OverlayUi";
 
 const App = () => {

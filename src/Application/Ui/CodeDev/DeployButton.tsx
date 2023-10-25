@@ -1,8 +1,8 @@
 import * as React from "react";
+import StoreContext from "../../Store/StoreContext";
 import style from "./DeployButton.css";
-import StoreContext from "./Store/StoreContext";
 
-export const DeployButton = () => {
+const DeployButton = () => {
   const rootStore = React.useContext(StoreContext);
   const appStore = rootStore.applicationStore;
   const deployCode = () => {
@@ -14,3 +14,5 @@ export const DeployButton = () => {
     </div>
   );
 };
+
+export default DeployButton;

@@ -4,7 +4,7 @@ import { EditorView, basicSetup } from "codemirror";
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import { dracula } from "thememirror";
-import StoreContext from "./Store/StoreContext";
+import StoreContext from "../../Store/StoreContext";
 
 const CodeEditor = () => {
   const rootStore = React.useContext(StoreContext);
