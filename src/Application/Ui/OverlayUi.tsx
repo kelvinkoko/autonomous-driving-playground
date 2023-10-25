@@ -6,12 +6,12 @@ import BrakePedal from "./BrakePedal";
 import ForcePedal from "./ForcePedal";
 import glassStyles from "./GlassPanels.css";
 import ModelSelection from "./ModelSelection";
+import styles from "./OverlayUi.css";
 import SensingDisplay from "./SensingDisplay";
 import SpeedDisplay from "./SpeedDisplay";
 import SteeringWheel from "./SteeringWheel";
-import styles from "./Ui.css";
 
-const Ui = observer(() => {
+const OverlayUi = observer(() => {
   const rootStore = React.useContext(StoreContext);
   const appStore = rootStore.applicationStore;
   switch (appStore.initState) {
@@ -54,4 +54,4 @@ const Content = () => {
   );
 };
 
-export default Ui;
+export default OverlayUi;

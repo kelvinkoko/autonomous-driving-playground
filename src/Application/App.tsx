@@ -6,7 +6,7 @@ import style from "./App.css";
 import CodeEditor from "./CodeEditor";
 import { DeployButton } from "./DeployButton";
 import { onCanvasResize, start } from "./Simulation";
-import Ui from "./Ui/Ui";
+import OverlayUi from "./Ui/OverlayUi";
 
 const App = () => {
   const canvasRef = useRef(null);
@@ -27,7 +27,7 @@ const App = () => {
     >
       <div className={style.main}>
         <div className={style.canvas} ref={canvasRef} />
-        <Ui />
+        <OverlayUi />
       </div>
       <div className={style.codePane}>
         <CodeEditor />
