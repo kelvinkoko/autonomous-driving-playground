@@ -57,7 +57,17 @@ export async function start(container: HTMLElement) {
 
   waitForModelSelection(scene);
   observe(appStore, "driveCode", change => {
-    eval(change.newValue);
+    try {
+      eval(change.newValue);
+      appStore.setLog("Deployed!");
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        appStore.setLog(error.message);
+      } else {
+        appStore.setLog("Error, please check the code");
+        throw error;
+      }
+    }
   });
 }
 

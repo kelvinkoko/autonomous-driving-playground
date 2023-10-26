@@ -5,6 +5,7 @@ export class ApplicationStore {
   modelQuality: ModelQuality | undefined = undefined;
   editorCode: string = "";
   driveCode: string = "";
+  log: string = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -24,6 +25,10 @@ export class ApplicationStore {
 
   setDriveCode(code: string) {
     this.driveCode = code;
+  }
+
+  setLog(log: string) {
+    this.log = log;
   }
 }
 

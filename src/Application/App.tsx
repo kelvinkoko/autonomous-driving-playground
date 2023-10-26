@@ -6,6 +6,7 @@ import style from "./App.css";
 import { ENABLE_CODE_EDITOR } from "./Config/FeatureFlag";
 import { onCanvasResize, start } from "./Simulation";
 import CodeEditor from "./Ui/CodeDev/CodeEditor";
+import Console from "./Ui/CodeDev/Console";
 import DeployButton from "./Ui/CodeDev/DeployButton";
 import OverlayUi from "./Ui/OverlayUi";
 
@@ -21,7 +22,7 @@ const App = () => {
   return (
     <Allotment
       className={style.container}
-      defaultSizes={[80, 20]}
+      defaultSizes={[70, 30]}
       onChange={() => {
         onCanvasResize?.();
       }}
@@ -31,9 +32,20 @@ const App = () => {
         <OverlayUi />
       </div>
       <Allotment.Pane className={style.codePane} visible={ENABLE_CODE_EDITOR}>
+        <CodePane />
+      </Allotment.Pane>
+    </Allotment>
+  );
+};
+
+const CodePane = () => {
+  return (
+    <Allotment vertical defaultSizes={[70, 30]}>
+      <div>
         <CodeEditor />
         <DeployButton />
-      </Allotment.Pane>
+      </div>
+      <Console />
     </Allotment>
   );
 };
