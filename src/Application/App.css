@@ -23,3 +23,7 @@
   background-color: #2d2f3f;
   height: 100%;
 }
+.editorWithButtonContainer {
+  display: flex;
+  flex-direction: column;
+}

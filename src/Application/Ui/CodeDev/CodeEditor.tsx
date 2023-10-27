@@ -5,6 +5,7 @@ import * as React from "react";
 import { useEffect, useRef } from "react";
 import { dracula } from "thememirror";
 import StoreContext from "../../Store/StoreContext";
+import style from "./CodeEditor.css";
 
 const CodeEditor = () => {
   const rootStore = React.useContext(StoreContext);
@@ -41,7 +42,7 @@ const CodeEditor = () => {
       });
     }
   }, []);
-  return <div ref={codeEditorRef} />;
+  return <div className={style.container} ref={codeEditorRef} />;
 };
 
 export default CodeEditor;

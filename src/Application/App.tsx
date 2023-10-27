@@ -41,10 +41,10 @@ const App = () => {
 const CodePane = () => {
   return (
     <Allotment vertical defaultSizes={[70, 30]}>
-      <div>
+      <Allotment.Pane className={style.editorWithButtonContainer}>
         <CodeEditor />
         <DeployButton />
-      </div>
+      </Allotment.Pane>
       <Console />
     </Allotment>
   );
