@@ -23,3 +23,19 @@
   height: 100px;
   margin: 10px;
 }
+
+.drivingModeContainer {
+  display: flex;
+  text-align: center;
+  color: #ffffff9e;
+  font-size: 12px;
+  padding: 6px;
+}
+
+.drivingMode {
+  flex: 1;
+}
+
+.currentMode {
+  color: #ffffff;
+}

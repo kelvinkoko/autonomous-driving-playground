@@ -10,6 +10,7 @@ export class CarStore {
   carConfig: CarConfig = model3LowRes;
   detectionResult: Array<DetectionResult> = [];
   isManualDriving: boolean = false;
+  isAutopilotEnabled: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -44,5 +45,9 @@ export class CarStore {
 
   setIsManualDriving = (isManual: boolean) => {
     this.isManualDriving = isManual;
+  };
+
+  setIsAutopilotEnable = (enable: boolean) => {
+    this.isAutopilotEnabled = enable;
   };
 }

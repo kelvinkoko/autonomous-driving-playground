@@ -122,7 +122,11 @@ function updateVehicle() {
     return;
   }
   const detectionResult = carStore.detectionResult;
-  if (ENABLE_SELF_DRIVE && !carStore.isManualDriving) {
+  if (
+    ENABLE_SELF_DRIVE &&
+    !carStore.isManualDriving &&
+    carStore.isAutopilotEnabled
+  ) {
     const action = runSelfDrive(detectionResult);
     carStore.applyForce(action.force);
     carStore.applyBrake(action.brake);

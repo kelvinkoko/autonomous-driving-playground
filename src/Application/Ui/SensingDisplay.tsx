@@ -14,21 +14,39 @@ const SensingDisplay = observer(() => {
     return <div></div>;
   }
   return (
-    <div className={styles.detectedResult}>
-      <div className={styles.row}>
-        <SensingResult result={detections[7]} />
-        <SensingResult result={detections[0]} />
-        <SensingResult result={detections[1]} />
+    <div>
+      <div className={styles.detectedResult}>
+        <div className={styles.row}>
+          <SensingResult result={detections[7]} />
+          <SensingResult result={detections[0]} />
+          <SensingResult result={detections[1]} />
+        </div>
+        <div className={styles.row}>
+          <SensingResult result={detections[6]} />
+          <img className={styles.topViewImage} src={topViewImage} />
+          <SensingResult result={detections[2]} />
+        </div>
+        <div className={styles.row}>
+          <SensingResult result={detections[5]} />
+          <SensingResult result={detections[4]} />
+          <SensingResult result={detections[3]} />
+        </div>
       </div>
-      <div className={styles.row}>
-        <SensingResult result={detections[6]} />
-        <img className={styles.topViewImage} src={topViewImage} />
-        <SensingResult result={detections[2]} />
-      </div>
-      <div className={styles.row}>
-        <SensingResult result={detections[5]} />
-        <SensingResult result={detections[4]} />
-        <SensingResult result={detections[3]} />
+      <div className={styles.drivingModeContainer}>
+        <div
+          className={`${styles.drivingMode} ${
+            carStore.isManualDriving ? styles.currentMode : ""
+          }`}
+        >
+          Manual
+        </div>
+        <div
+          className={`${styles.drivingMode} ${
+            carStore.isAutopilotEnabled ? styles.currentMode : ""
+          }`}
+        >
+          Autopilot
+        </div>
       </div>
     </div>
   );

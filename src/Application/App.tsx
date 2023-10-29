@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import style from "./App.css";
 import { ENABLE_CODE_EDITOR } from "./Config/FeatureFlag";
 import { onCanvasResize, start } from "./Simulation";
+import AutopilotControlButton from "./Ui/CodeDev/AutopilotControlButton";
 import CodeEditor from "./Ui/CodeDev/CodeEditor";
 import Console from "./Ui/CodeDev/Console";
 import DeployButton from "./Ui/CodeDev/DeployButton";
@@ -44,6 +45,7 @@ const CodePane = () => {
       <Allotment.Pane className={style.editorWithButtonContainer}>
         <CodeEditor />
         <DeployButton />
+        <AutopilotControlButton />
       </Allotment.Pane>
       <Console />
     </Allotment>
