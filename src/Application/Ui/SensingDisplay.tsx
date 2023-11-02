@@ -1,6 +1,8 @@
 import { observer } from "mobx-react";
 import * as React from "react";
+import Code from "../Assets/Images/code-editor-icon.svg";
 import topViewImage from "../Assets/Images/model3-top-view.png";
+import Steering from "../Assets/Images/steering-wheel-icon.svg";
 import { DetectionObjectType } from "../Car/DetectionObjectType";
 import { DetectionResult } from "../Car/DetectionResult";
 import StoreContext from "../Store/StoreContext";
@@ -32,6 +34,7 @@ const SensingDisplay = observer(() => {
           <SensingResult result={detections[3]} />
         </div>
       </div>
+      <div className={styles.divider} />
       <div className={styles.drivingModeContainer}>
         <div
           className={`${styles.drivingMode} ${
@@ -47,6 +50,10 @@ const SensingDisplay = observer(() => {
         >
           Autopilot
         </div>
+      </div>
+      <div className={styles.iconContainer}>
+        <Steering className={styles.icon} />
+        <Code className={styles.icon} />
       </div>
     </div>
   );

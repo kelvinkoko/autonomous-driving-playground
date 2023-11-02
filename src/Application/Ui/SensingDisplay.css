@@ -39,3 +39,26 @@
 .currentMode {
   color: #ffffff;
 }
+
+.iconContainer {
+  display: flex;
+  text-align: center;
+  justify-content: space-around;
+  color: #ffffff9e;
+  padding-bottom: 6px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: #ffffff;
+}
+
+.divider {
+  height: 1px;
+  background-color: #00000070;
+}
