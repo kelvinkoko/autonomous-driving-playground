@@ -6,6 +6,7 @@ export class ApplicationStore {
   editorCode: string = "";
   driveCode: string = "";
   log: string = "";
+  isShowingCodePane: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -30,6 +31,10 @@ export class ApplicationStore {
   setLog(log: string) {
     this.log = log;
   }
+
+  setIsShowingCodePane(value: boolean) {
+    this.isShowingCodePane = value;
+  }
 }
 
 export enum ModelQuality {
@@ -42,5 +47,3 @@ export enum InitState {
   LOADING,
   READY
 }
-
-export const applicationStore = new ApplicationStore();

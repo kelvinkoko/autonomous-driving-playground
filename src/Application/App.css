@@ -18,12 +18,21 @@
 .main {
   position: relative;
   height: 100%;
+  transition: all 0.2s ease-in-out;
+  will-change: width;
 }
 .codePane {
   background-color: #2d2f3f;
   height: 100%;
+  transition: all 0.2s ease-in-out;
+  will-change: width;
 }
 .editorWithButtonContainer {
   display: flex;
   flex-direction: column;
+}
+.container:global(.split-view-sash-dragging) .main,
+.container:global(.split-view-sash-dragging) .codePane {
+  /* disable animation while sash dragging */
+  transition: none;
 }

@@ -10,8 +10,12 @@ import styles from "./SensingDisplay.css";
 
 const SensingDisplay = observer(() => {
   const rootStore = React.useContext(StoreContext);
+  const appStore = rootStore.applicationStore;
   const carStore = rootStore.carStore;
   const detections = carStore.detectionResult;
+  const toggleEditor = () => {
+    appStore.setIsShowingCodePane(!appStore.isShowingCodePane);
+  };
   if (detections.length < 8) {
     return <div></div>;
   }
@@ -53,7 +57,7 @@ const SensingDisplay = observer(() => {
       </div>
       <div className={styles.iconContainer}>
         <Steering className={styles.icon} />
-        <Code className={styles.icon} />
+        <Code className={styles.icon} onClick={toggleEditor} />
       </div>
     </div>
   );
