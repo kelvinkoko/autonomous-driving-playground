@@ -45,3 +45,7 @@ Model 3's 3D model
 [Steering icons created by Andrejs Kirma - Flaticon](https://www.flaticon.com/free-icons/steering)
 
 [Pedal icons created by berkahicon - Flaticon](https://www.flaticon.com/free-icons/pedal)
+
+- UI Icons:
+
+[Icons from svgrepo.com](https://www.svgrepo.com/)
