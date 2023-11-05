@@ -16,6 +16,9 @@ const SensingDisplay = observer(() => {
   const toggleEditor = () => {
     appStore.setIsShowingCodePane(!appStore.isShowingCodePane);
   };
+  const showManualInstruction = () => {
+    appStore.setIsShowingManualInstruction(true);
+  };
   if (detections.length < 8) {
     return <div></div>;
   }
@@ -56,7 +59,7 @@ const SensingDisplay = observer(() => {
         </div>
       </div>
       <div className={styles.iconContainer}>
-        <Steering className={styles.icon} />
+        <Steering className={styles.icon} onClick={showManualInstruction} />
         <Code className={styles.icon} onClick={toggleEditor} />
       </div>
     </div>

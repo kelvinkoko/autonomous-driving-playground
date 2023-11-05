@@ -17,6 +17,7 @@ export class ApplicationStore {
   driveCode: string = this.defaultLogic;
   log: string = "";
   isShowingCodePane: boolean = false;
+  isShowingManualInstruction: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -44,6 +45,10 @@ export class ApplicationStore {
 
   setIsShowingCodePane(value: boolean) {
     this.isShowingCodePane = value;
+  }
+
+  setIsShowingManualInstruction(value: boolean) {
+    this.isShowingManualInstruction = value;
   }
 }
 

@@ -6,6 +6,7 @@ import BrakePedal from "./CarControl/BrakePedal";
 import ForcePedal from "./CarControl/ForcePedal";
 import SteeringWheel from "./CarControl/SteeringWheel";
 import glassStyles from "./GlassPanels.css";
+import ManualInstructionDialog from "./ManualInstructionDialog";
 import ModelSelection from "./ModelSelection";
 import styles from "./OverlayUi.css";
 import SensingDisplay from "./SensingDisplay";
@@ -20,7 +21,7 @@ const OverlayUi = observer(() => {
     case InitState.LOADING:
       return <Loading />;
     case InitState.READY:
-      return <Content />;
+      return <Content showManual={appStore.isShowingManualInstruction} />;
   }
 });
 
@@ -34,7 +35,11 @@ const Loading = () => {
   );
 };
 
-const Content = () => {
+interface ContentProps {
+  showManual: boolean;
+}
+
+const Content = ({ showManual }: ContentProps) => {
   return (
     <React.Fragment>
       <div className={`${glassStyles.grayPanel} ${styles.speedPanel}`}>
@@ -50,6 +55,7 @@ const Content = () => {
         <BrakePedal />
         <ForcePedal />
       </div>
+      {showManual ? <ManualInstructionDialog /> : <></>}
     </React.Fragment>
   );
 };
