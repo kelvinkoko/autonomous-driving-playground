@@ -19,7 +19,6 @@ import { observe } from "mobx";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { DetectionResult } from "./Car/DetectionResult";
 import { createRayLines, detectNearestObjects } from "./Car/DistanceSensing";
-import { ENABLE_CODE_EDITOR } from "./Config/FeatureFlag";
 import { createTrack } from "./Environment/Track";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
@@ -27,8 +26,6 @@ import { InitState, ModelQuality } from "./Store/ApplicationStore";
 import { rootStore } from "./Store/RootStore";
 import { updateVisual } from "./Utils/Visual";
 import { createEnvironment } from "./World/Environment";
-
-const ENABLE_SELF_DRIVE = ENABLE_CODE_EDITOR;
 
 const appStore = rootStore.applicationStore;
 const carStore = rootStore.carStore;
@@ -56,19 +53,29 @@ export async function start(container: HTMLElement) {
   animate(renderer, scene, camera, controls);
 
   waitForModelSelection(scene);
+  initDriveCode();
+}
+
+function initDriveCode() {
+  applyDriveCode(appStore.editorCode);
   observe(appStore, "driveCode", change => {
-    try {
-      eval(change.newValue);
-      appStore.setLog("Deployed!");
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        appStore.setLog(error.message);
-      } else {
-        appStore.setLog("Error, please check the code");
-        throw error;
-      }
-    }
+    applyDriveCode(change.newValue);
   });
+}
+
+function applyDriveCode(code: string) {
+  const appStore = rootStore.applicationStore;
+  try {
+    eval(code);
+    appStore.setLog("Deployed!");
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      appStore.setLog(error.message);
+    } else {
+      appStore.setLog("Error, please check the code");
+      throw error;
+    }
+  }
 }
 
 function waitForModelSelection(scene: THREE.Scene) {
@@ -122,11 +129,7 @@ function updateVehicle() {
     return;
   }
   const detectionResult = carStore.detectionResult;
-  if (
-    ENABLE_SELF_DRIVE &&
-    !carStore.isManualDriving &&
-    carStore.isAutopilotEnabled
-  ) {
+  if (!carStore.isManualDriving && carStore.isAutopilotEnabled) {
     const action = runSelfDrive(detectionResult);
     carStore.applyForce(action.force);
     carStore.applyBrake(action.brake);

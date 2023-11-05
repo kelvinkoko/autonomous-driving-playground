@@ -11,15 +11,7 @@ const CodeEditor = () => {
   const rootStore = React.useContext(StoreContext);
   const appStore = rootStore.applicationStore;
   const codeEditorRef = useRef(null);
-  const defaultLogic = `drive = (detectionResult) => {
-  const diff = detectionResult[1].distance - detectionResult[7].distance;
-  const steering = Math.max(-0.7, Math.min(diff, 0.7));
-  return {
-    force: 0.4,
-    brake: 0,
-    steering
-  };
-}`;
+
   useEffect(() => {
     if (codeEditorRef.current) {
       const onUpdate = EditorView.updateListener.of(update => {
@@ -27,7 +19,7 @@ const CodeEditor = () => {
       });
 
       const state = EditorState.create({
-        doc: defaultLogic,
+        doc: appStore.editorCode,
         extensions: [
           basicSetup,
           javascript(),

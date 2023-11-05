@@ -1,10 +1,20 @@
 import { makeAutoObservable } from "mobx";
 
 export class ApplicationStore {
+  private defaultLogic = `drive = (detectionResult) => {
+    const diff = detectionResult[1].distance - detectionResult[7].distance;
+    const steering = Math.max(-0.7, Math.min(diff, 0.7));
+    return {
+      force: 0.4,
+      brake: 0,
+      steering
+    };
+  }`;
+
   initState: InitState = InitState.MODEL_SELECTION;
   modelQuality: ModelQuality | undefined = undefined;
-  editorCode: string = "";
-  driveCode: string = "";
+  editorCode: string = this.defaultLogic;
+  driveCode: string = this.defaultLogic;
   log: string = "";
   isShowingCodePane: boolean = false;
 
