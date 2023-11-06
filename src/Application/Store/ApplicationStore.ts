@@ -43,6 +43,10 @@ export class ApplicationStore {
     this.log = log;
   }
 
+  appendLog(log: string) {
+    this.log += "\n" + log;
+  }
+
   setIsShowingCodePane(value: boolean) {
     this.isShowingCodePane = value;
   }

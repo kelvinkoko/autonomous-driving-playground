@@ -67,7 +67,8 @@ function applyDriveCode(code: string) {
   const appStore = rootStore.applicationStore;
   try {
     eval(code);
-    appStore.setLog("Deployed!");
+    appStore.setLog("Drive code deployed!");
+    appStore.appendLog("Enable Autopilot to test the logic");
   } catch (error) {
     if (error instanceof SyntaxError) {
       appStore.setLog(error.message);
