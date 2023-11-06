@@ -9,7 +9,18 @@
   padding: 10px;
   cursor: pointer;
 }
+
 .deployButton:hover {
   background-color: #285db3;
   color: #ffffff;
+}
+
+.disable {
+  background-color: #414256;
+  color: #66666e;
+}
+
+.disable:hover {
+  background-color: #414256;
+  color: #66666e;
 }
