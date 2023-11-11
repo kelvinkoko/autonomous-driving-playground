@@ -1,0 +1,21 @@
+.container {
+  color: #dcdcdc;
+  font-size: 14px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.item:hover {
+  color: #ffffff;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}

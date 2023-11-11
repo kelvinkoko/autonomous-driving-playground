@@ -10,6 +10,7 @@ import ManualInstructionDialog from "./ManualInstructionDialog";
 import ModelSelection from "./ModelSelection";
 import styles from "./OverlayUi.css";
 import SensingDisplay from "./SensingDisplay";
+import SimulationControls from "./SimulationControls";
 import SpeedDisplay from "./SpeedDisplay";
 
 const OverlayUi = observer(() => {
@@ -42,6 +43,9 @@ interface ContentProps {
 const Content = ({ showManual }: ContentProps) => {
   return (
     <React.Fragment>
+      <div className={`${glassStyles.darkPanel} ${styles.simulationControls}`}>
+        <SimulationControls />
+      </div>
       <div className={`${glassStyles.grayPanel} ${styles.speedPanel}`}>
         <SpeedDisplay />
       </div>

@@ -56,6 +56,19 @@ export async function start(container: HTMLElement) {
   initDriveCode();
 }
 
+export function reset() {
+  if (!vehicle) {
+    return;
+  }
+  carStore.applyBrake(0);
+  carStore.applyForce(0);
+  carStore.setSteering(0);
+  vehicle.chassisBody.position.set(0, 2, 0);
+  vehicle.chassisBody.quaternion.set(0, 1, 0, 0);
+  vehicle.chassisBody.angularVelocity.set(0, 0, 0);
+  vehicle.chassisBody.velocity.set(0, 0, 0);
+}
+
 function initDriveCode() {
   applyDriveCode(appStore.editorCode);
   observe(appStore, "driveCode", change => {

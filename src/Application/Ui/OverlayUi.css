@@ -49,3 +49,10 @@
   pointer-events: auto;
   user-select: none;
 }
+
+.simulationControls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+}
