@@ -7,6 +7,16 @@
   user-select: none;
 }
 
+.timerPanel {
+  position: absolute;
+  top: 0;
+  left: calc(50% + 135px);
+  transform: translateX(-50%);
+  margin: 10px;
+  padding-top: 16px;
+  user-select: none;
+}
+
 .sensingPanel {
   position: absolute;
   top: 0;

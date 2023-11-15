@@ -18,8 +18,9 @@ const Timer = () => {
   const minuteString = String(minutes).padStart(2, "0");
   const secondString = String(seconds).padStart(5, "0");
   return (
-    <div className={styles.time}>
-      <p>{`${minuteString}:${secondString}`}</p>
+    <div>
+      <div className={styles.title}>Lap Time</div>
+      <div className={styles.time}>{`${minuteString}:${secondString}`}</div>
     </div>
   );
 };

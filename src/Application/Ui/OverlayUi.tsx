@@ -12,6 +12,7 @@ import styles from "./OverlayUi.css";
 import SensingDisplay from "./SensingDisplay";
 import SimulationControls from "./SimulationControls";
 import SpeedDisplay from "./SpeedDisplay";
+import Timer from "./Timer";
 
 const OverlayUi = observer(() => {
   const rootStore = React.useContext(StoreContext);
@@ -48,6 +49,9 @@ const Content = ({ showManual }: ContentProps) => {
       </div>
       <div className={`${glassStyles.grayPanel} ${styles.speedPanel}`}>
         <SpeedDisplay />
+      </div>
+      <div className={styles.timerPanel}>
+        <Timer />
       </div>
       <div className={`${glassStyles.darkPanel} ${styles.sensingPanel}`}>
         <SensingDisplay />
