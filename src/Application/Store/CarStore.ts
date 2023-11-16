@@ -11,6 +11,7 @@ export class CarStore {
   detectionResult: Array<DetectionResult> = [];
   isManualDriving: boolean = false;
   isAutopilotEnabled: boolean = false;
+  lapTimeStartMs: number = 0;
 
   constructor() {
     makeAutoObservable(this);
@@ -49,5 +50,9 @@ export class CarStore {
 
   setIsAutopilotEnable = (enable: boolean) => {
     this.isAutopilotEnabled = enable;
+  };
+
+  recordStartLapTime = () => {
+    this.lapTimeStartMs = Date.now();
   };
 }

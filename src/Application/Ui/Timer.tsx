@@ -1,13 +1,17 @@
+import { observer } from "mobx-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import StoreContext from "../Store/StoreContext";
 import styles from "./Timer.css";
 
-const Timer = () => {
+const Timer = observer(() => {
+  const rootStore = React.useContext(StoreContext);
+  const carStore = rootStore.carStore;
   const [milliseconds, setMilliseconds] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setMilliseconds(prevMilliseconds => prevMilliseconds + 10);
+      setMilliseconds(Date.now() - carStore.lapTimeStartMs);
     }, 10);
 
     return () => clearInterval(interval);
@@ -23,6 +27,6 @@ const Timer = () => {
       <div className={styles.time}>{`${minuteString}:${secondString}`}</div>
     </div>
   );
-};
+});
 
 export default Timer;

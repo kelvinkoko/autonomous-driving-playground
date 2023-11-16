@@ -63,6 +63,7 @@ export function reset() {
   carStore.applyBrake(0);
   carStore.applyForce(0);
   carStore.setSteering(0);
+  carStore.recordStartLapTime();
   vehicle.chassisBody.position.set(0, 2, 0);
   vehicle.chassisBody.quaternion.set(0, 1, 0, 0);
   vehicle.chassisBody.angularVelocity.set(0, 0, 0);
@@ -118,6 +119,7 @@ async function loadCar(config: CarConfig, scene: THREE.Scene) {
     config
   );
   appStore.setInitState(InitState.READY);
+  carStore.recordStartLapTime();
 }
 
 function animate(
