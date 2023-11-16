@@ -34,6 +34,7 @@ const world = new CANNON.World({
   gravity: new CANNON.Vec3(0, -9.82, 0)
 });
 let vehicle: CANNON.RaycastVehicle;
+const initCarPosition = new CANNON.Vec3(0, 2, 0);
 
 export async function start(container: HTMLElement) {
   const scene = new THREE.Scene();
@@ -64,7 +65,7 @@ export function reset() {
   carStore.applyForce(0);
   carStore.setSteering(0);
   carStore.recordStartLapTime();
-  vehicle.chassisBody.position.set(0, 2, 0);
+  vehicle.chassisBody.position.copy(initCarPosition);
   vehicle.chassisBody.quaternion.set(0, 1, 0, 0);
   vehicle.chassisBody.angularVelocity.set(0, 0, 0);
   vehicle.chassisBody.velocity.set(0, 0, 0);
@@ -108,7 +109,6 @@ function waitForModelSelection(scene: THREE.Scene) {
 }
 
 async function loadCar(config: CarConfig, scene: THREE.Scene) {
-  const initCarPosition = new CANNON.Vec3(0, 4, 0);
   appStore.setInitState(InitState.LOADING);
   vehicle = await createVehicle(
     initCarPosition,
