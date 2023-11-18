@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { CarConfig, model3LowRes } from "../Car/Car";
 import { DetectionResult } from "../Car/DetectionResult";
+import { Position } from "../DataModel/Position";
 
 export class CarStore {
   speedMS: number = 0;
@@ -12,6 +13,7 @@ export class CarStore {
   isManualDriving: boolean = false;
   isAutopilotEnabled: boolean = false;
   lapTimeStartMs: number = 0;
+  position: Position = { x: 0, y: 0 };
 
   constructor() {
     makeAutoObservable(this);
@@ -54,5 +56,10 @@ export class CarStore {
 
   recordStartLapTime = () => {
     this.lapTimeStartMs = Date.now();
+  };
+
+  updatePosition = (x: number, y: number) => {
+    this.position.x = x;
+    this.position.y = y;
   };
 }

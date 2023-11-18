@@ -1,0 +1,12 @@
+.mapContainer {
+  position: relative;
+  border: 1px solid #000; /* Add a border to the container for visibility */
+}
+
+.point {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background-color: red;
+  border-radius: 50%;
+}

@@ -171,9 +171,13 @@ interface DriveAction {
 function updatePhysics(scene: THREE.Scene) {
   world.fixedStep();
   if (vehicle) {
-    rootStore.carStore.setSpeed(vehicle.chassisBody.velocity.length());
+    carStore.setSpeed(vehicle.chassisBody.velocity.length());
+    carStore.updatePosition(
+      vehicle.chassisBody.position.x,
+      vehicle.chassisBody.position.z
+    );
     const result = detectNearestObjects(scene, vehicle, carStore.carConfig);
-    rootStore.carStore.setDetectionResult(result);
+    carStore.setDetectionResult(result);
   }
 }
 
