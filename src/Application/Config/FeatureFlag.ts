@@ -1,5 +1,6 @@
 export const ENABLE_CODE_EDITOR = isEnableCodeEditor();
 export const ENABLE_DEPLOY = true;
+export const ENABLE_TIMER = false;
 
 function isEnableDeploy(): boolean {
   const queryInput = getBooleanQueryParam(

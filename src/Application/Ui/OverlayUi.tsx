@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
+import { ENABLE_TIMER } from "../Config/FeatureFlag";
 import { InitState } from "../Store/ApplicationStore";
 import StoreContext from "../Store/StoreContext";
 import BrakePedal from "./CarControl/BrakePedal";
@@ -50,9 +51,11 @@ const Content = ({ showManual }: ContentProps) => {
       <div className={`${glassStyles.grayPanel} ${styles.speedPanel}`}>
         <SpeedDisplay />
       </div>
-      <div className={styles.timerPanel}>
-        <Timer />
-      </div>
+      {ENABLE_TIMER ? (
+        <div className={styles.timerPanel}>
+          <Timer />
+        </div>
+      ) : null}
       <div className={`${glassStyles.darkPanel} ${styles.sensingPanel}`}>
         <SensingDisplay />
       </div>
