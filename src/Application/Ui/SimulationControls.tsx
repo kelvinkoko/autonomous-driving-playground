@@ -1,6 +1,6 @@
 import * as React from "react";
 import Reset from "../Assets/Images/reset-icon.svg";
-import { reset } from "../Simulation";
+import { reset } from "../Simulation/Simulation";
 import styles from "./SimulationControls.css";
 
 const SimulationControls = () => {

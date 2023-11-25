@@ -5,10 +5,10 @@ import wheelModelFile from "../../Assets/Models/wheel.glb";
 
 import { observe } from "mobx";
 import * as THREE from "three";
-import { groundMaterial } from "../../Ground";
 import { CarStore } from "../../Store/CarStore";
 import { loadModel } from "../../Utils/Loader";
 import { addVisual, pushVisual } from "../../Utils/Visual";
+import { groundMaterial } from "../World/Ground";
 import { CarControlKeys } from "./CarControlKeys";
 
 export const model3HighRes: CarConfig = {

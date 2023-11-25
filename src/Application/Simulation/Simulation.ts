@@ -1,34 +1,34 @@
 import * as CANNON from "cannon-es";
 import * as THREE from "three";
+import { CameraMode, VisualMode } from "../Config/VisualMode";
 import {
   setupCamera,
   setupOrbitControls,
   updateCameraFollow,
   updateCameraFollowBehind
 } from "./Camera";
-import { CameraMode, VisualMode } from "./Config/VisualMode";
 import {
   CarConfig,
   createVehicle,
   model3HighRes,
   model3LowRes
-} from "./Simulation/Vehicle/Car";
-import { DEFAULT_KEYS_1 } from "./Simulation/Vehicle/CarControlKeys";
+} from "./Vehicle/Car";
+import { DEFAULT_KEYS_1 } from "./Vehicle/CarControlKeys";
 
 import { observe } from "mobx";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { createGround } from "./Ground";
-import { createTrack } from "./Simulation/Environment/Track";
-import { DetectionResult } from "./Simulation/Vehicle/DetectionResult";
+import { InitState, ModelQuality } from "../Store/ApplicationStore";
+import { rootStore } from "../Store/RootStore";
+import { updateVisual } from "../Utils/Visual";
+import { createTrack } from "./Track/Track";
+import { DetectionResult } from "./Vehicle/DetectionResult";
 import {
   createRayLines,
   detectNearestObjects
-} from "./Simulation/Vehicle/DistanceSensing";
-import { createSky } from "./Sky";
-import { InitState, ModelQuality } from "./Store/ApplicationStore";
-import { rootStore } from "./Store/RootStore";
-import { updateVisual } from "./Utils/Visual";
-import { createEnvironment } from "./Simulation/World/Environment";
+} from "./Vehicle/DistanceSensing";
+import { createEnvironment } from "./World/Environment";
+import { createGround } from "./World/Ground";
+import { createSky } from "./World/Sky";
 
 const appStore = rootStore.applicationStore;
 const carStore = rootStore.carStore;

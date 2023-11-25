@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import style from "./App.css";
-import { onCanvasResize, start } from "./Simulation";
+import { onCanvasResize, start } from "./Simulation/Simulation";
 import StoreContext from "./Store/StoreContext";
 import AutopilotControlButton from "./Ui/CodeDev/AutopilotControlButton";
 import CodeEditor from "./Ui/CodeDev/CodeEditor";

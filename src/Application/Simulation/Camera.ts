@@ -1,7 +1,7 @@
 import * as CANNON from "cannon-es";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { toThreeQuaternion, toThreeVector3 } from "./Utils/Conversion";
+import { toThreeQuaternion, toThreeVector3 } from "../Utils/Conversion";
 
 export function setupCamera(container: HTMLElement) {
   const width = container.clientWidth;

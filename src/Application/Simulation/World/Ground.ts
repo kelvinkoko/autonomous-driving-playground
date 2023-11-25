@@ -1,7 +1,7 @@
 import * as CANNON from "cannon-es";
-import { VisualMode } from "./Config/VisualMode";
-import InfiniteGridHelper from "./Utils/InfiniteGridHelper";
-import { addVisual } from "./Utils/Visual";
+import { VisualMode } from "../../Config/VisualMode";
+import InfiniteGridHelper from "../../Utils/InfiniteGridHelper";
+import { addVisual } from "../../Utils/Visual";
 
 export const groundMaterial = new CANNON.Material("ground");
 
