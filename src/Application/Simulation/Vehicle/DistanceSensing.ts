@@ -1,7 +1,7 @@
 import { RaycastVehicle } from "cannon-es";
 import * as THREE from "three";
-import { VisualMode } from "../Config/VisualMode";
-import { toThreeQuaternion } from "../Utils/Conversion";
+import { VisualMode } from "../../Config/VisualMode";
+import { toThreeQuaternion } from "../../Utils/Conversion";
 import { CarConfig } from "./Car";
 import { DetectionResult } from "./DetectionResult";
 

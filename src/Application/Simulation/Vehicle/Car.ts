@@ -1,14 +1,14 @@
 import * as CANNON from "cannon-es";
-import chassisModelFile from "../Assets/Models/chassis.gltf";
-import chassisLowResModelFile from "../Assets/Models/model3-chassis-low.glb";
-import wheelModelFile from "../Assets/Models/wheel.glb";
+import chassisModelFile from "../../Assets/Models/chassis.gltf";
+import chassisLowResModelFile from "../../Assets/Models/model3-chassis-low.glb";
+import wheelModelFile from "../../Assets/Models/wheel.glb";
 
 import { observe } from "mobx";
 import * as THREE from "three";
-import { groundMaterial } from "../Ground";
-import { CarStore } from "../Store/CarStore";
-import { loadModel } from "../Utils/Loader";
-import { addVisual, pushVisual } from "../Utils/Visual";
+import { groundMaterial } from "../../Ground";
+import { CarStore } from "../../Store/CarStore";
+import { loadModel } from "../../Utils/Loader";
+import { addVisual, pushVisual } from "../../Utils/Visual";
 import { CarControlKeys } from "./CarControlKeys";
 
 export const model3HighRes: CarConfig = {

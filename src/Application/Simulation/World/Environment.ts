@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
-import envMap from "../Assets/Images/track.hdr";
+import envMap from "../../Assets/Images/track.hdr";
 
 export function createEnvironment(
   scene: THREE.Scene,

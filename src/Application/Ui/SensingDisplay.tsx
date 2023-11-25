@@ -3,9 +3,9 @@ import * as React from "react";
 import Code from "../Assets/Images/code-editor-icon.svg";
 import topViewImage from "../Assets/Images/model3-top-view.png";
 import Steering from "../Assets/Images/steering-wheel-icon.svg";
+import { DetectionObjectType } from "../Simulation/Vehicle/DetectionObjectType";
+import { DetectionResult } from "../Simulation/Vehicle/DetectionResult";
 import StoreContext from "../Store/StoreContext";
-import { DetectionObjectType } from "../Vehicle/DetectionObjectType";
-import { DetectionResult } from "../Vehicle/DetectionResult";
 import styles from "./SensingDisplay.css";
 
 const SensingDisplay = observer(() => {
