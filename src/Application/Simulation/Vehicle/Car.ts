@@ -10,6 +10,7 @@ import { loadModel } from "../../Utils/Loader";
 import { addVisual, pushVisual } from "../../Utils/Visual";
 import { groundMaterial } from "../World/Ground";
 import { CarControlKeys } from "./CarControlKeys";
+import { detectNearestObjects } from "./DistanceSensing";
 
 export const model3HighRes: CarConfig = {
   chassisModel: chassisModelFile,
@@ -56,6 +57,39 @@ export interface CarConfig {
   track: number;
 }
 
+export class Car {
+  constructor(
+    private initPosition: CANNON.Vec3,
+    private carStore: CarStore,
+    public vehicle: CANNON.RaycastVehicle
+  ) {}
+
+  reset() {
+    this.carStore.applyBrake(0);
+    this.carStore.applyForce(0);
+    this.carStore.setSteering(0);
+    this.carStore.recordStartLapTime();
+    this.vehicle.chassisBody.position.copy(this.initPosition);
+    this.vehicle.chassisBody.quaternion.set(0, 1, 0, 0);
+    this.vehicle.chassisBody.angularVelocity.set(0, 0, 0);
+    this.vehicle.chassisBody.velocity.set(0, 0, 0);
+  }
+
+  updatePhysics(scene: THREE.Scene) {
+    this.carStore.setSpeed(this.vehicle.chassisBody.velocity.length());
+    this.carStore.updatePosition(
+      this.vehicle.chassisBody.position.x,
+      this.vehicle.chassisBody.position.z
+    );
+    const result = detectNearestObjects(
+      scene,
+      this.vehicle,
+      this.carStore.carConfig
+    );
+    this.carStore.setDetectionResult(result);
+  }
+}
+
 export async function createVehicle(
   position: CANNON.Vec3,
   controlKeys: CarControlKeys,
@@ -63,7 +97,7 @@ export async function createVehicle(
   scene: THREE.Scene,
   carStore: CarStore,
   currentCarModel: CarConfig
-): Promise<CANNON.RaycastVehicle> {
+): Promise<Car> {
   const chassisModel = await loadModel(currentCarModel.chassisModel);
   const wheelModel = await loadModel(wheelModelFile);
 
@@ -74,7 +108,7 @@ export async function createVehicle(
 
   observeStore(carStore, vehicle);
   bindKeyEvent(controlKeys, carStore);
-  return vehicle;
+  return new Car(position, carStore, vehicle);
 }
 
 function observeStore(carStore: CarStore, vehicle: CANNON.RaycastVehicle) {

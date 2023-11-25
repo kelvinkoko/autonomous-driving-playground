@@ -8,12 +8,14 @@ import {
   updateCameraFollowBehind
 } from "./Camera";
 import {
+  Car,
   CarConfig,
   createVehicle,
   model3HighRes,
   model3LowRes
 } from "./Vehicle/Car";
 import { DEFAULT_KEYS_1 } from "./Vehicle/CarControlKeys";
+``;
 
 import { observe } from "mobx";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -22,10 +24,7 @@ import { rootStore } from "../Store/RootStore";
 import { updateVisual } from "../Utils/Visual";
 import { createTrack } from "./Track/Track";
 import { DetectionResult } from "./Vehicle/DetectionResult";
-import {
-  createRayLines,
-  detectNearestObjects
-} from "./Vehicle/DistanceSensing";
+import { createRayLines } from "./Vehicle/DistanceSensing";
 import { createEnvironment } from "./World/Environment";
 import { createGround } from "./World/Ground";
 import { createSky } from "./World/Sky";
@@ -36,7 +35,7 @@ const carStore = rootStore.carStore;
 const world = new CANNON.World({
   gravity: new CANNON.Vec3(0, -9.82, 0)
 });
-let vehicle: CANNON.RaycastVehicle;
+let car: Car;
 const initCarPosition = new CANNON.Vec3(0, 2, 0);
 
 export async function start(container: HTMLElement) {
@@ -61,17 +60,10 @@ export async function start(container: HTMLElement) {
 }
 
 export function reset() {
-  if (!vehicle) {
+  if (!car) {
     return;
   }
-  carStore.applyBrake(0);
-  carStore.applyForce(0);
-  carStore.setSteering(0);
-  carStore.recordStartLapTime();
-  vehicle.chassisBody.position.copy(initCarPosition);
-  vehicle.chassisBody.quaternion.set(0, 1, 0, 0);
-  vehicle.chassisBody.angularVelocity.set(0, 0, 0);
-  vehicle.chassisBody.velocity.set(0, 0, 0);
+  car.reset();
 }
 
 function initDriveCode() {
@@ -113,7 +105,7 @@ function waitForModelSelection(scene: THREE.Scene) {
 
 async function loadCar(config: CarConfig, scene: THREE.Scene) {
   appStore.setInitState(InitState.LOADING);
-  vehicle = await createVehicle(
+  car = await createVehicle(
     initCarPosition,
     DEFAULT_KEYS_1,
     world,
@@ -144,7 +136,7 @@ function animate(
 }
 
 function updateVehicle() {
-  if (!vehicle) {
+  if (!car) {
     return;
   }
   const detectionResult = carStore.detectionResult;
@@ -173,27 +165,21 @@ interface DriveAction {
 
 function updatePhysics(scene: THREE.Scene) {
   world.fixedStep();
-  if (vehicle) {
-    carStore.setSpeed(vehicle.chassisBody.velocity.length());
-    carStore.updatePosition(
-      vehicle.chassisBody.position.x,
-      vehicle.chassisBody.position.z
-    );
-    const result = detectNearestObjects(scene, vehicle, carStore.carConfig);
-    carStore.setDetectionResult(result);
+  if (car) {
+    car.updatePhysics(scene);
   }
 }
 
 function updateCamera(camera: THREE.Camera, controls: OrbitControls) {
-  if (!vehicle) {
+  if (!car) {
     return;
   }
   switch (VisualMode.cameraMode) {
     case CameraMode.FOLLOW:
-      updateCameraFollow(camera, controls, vehicle);
+      updateCameraFollow(camera, controls, car.vehicle);
       break;
     case CameraMode.FOLLOW_BEHIND:
-      updateCameraFollowBehind(camera, controls, vehicle);
+      updateCameraFollowBehind(camera, controls, car.vehicle);
       break;
     default:
     // No action
