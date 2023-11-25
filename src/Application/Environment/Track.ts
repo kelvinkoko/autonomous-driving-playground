@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { DetectionObjectType } from "../Car/DetectionObjectType";
-import { SENSIBLE_OBJECT_LAYER } from "../Car/DistanceSensing";
+import { DetectionObjectType } from "../Vehicle/DetectionObjectType";
+import { SENSIBLE_OBJECT_LAYER } from "../Vehicle/DistanceSensing";
 import {
   ROAD_BLOCK_SIZE,
   createBlock,

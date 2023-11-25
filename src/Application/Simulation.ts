@@ -6,25 +6,28 @@ import {
   updateCameraFollow,
   updateCameraFollowBehind
 } from "./Camera";
+import { CameraMode, VisualMode } from "./Config/VisualMode";
 import {
   CarConfig,
   createVehicle,
   model3HighRes,
   model3LowRes
-} from "./Car/Car";
-import { DEFAULT_KEYS_1 } from "./Car/CarControlKeys";
-import { CameraMode, VisualMode } from "./Config/VisualMode";
+} from "./Vehicle/Car";
+import { DEFAULT_KEYS_1 } from "./Vehicle/CarControlKeys";
 
 import { observe } from "mobx";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { DetectionResult } from "./Car/DetectionResult";
-import { createRayLines, detectNearestObjects } from "./Car/DistanceSensing";
 import { createTrack } from "./Environment/Track";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
 import { InitState, ModelQuality } from "./Store/ApplicationStore";
 import { rootStore } from "./Store/RootStore";
 import { updateVisual } from "./Utils/Visual";
+import { DetectionResult } from "./Vehicle/DetectionResult";
+import {
+  createRayLines,
+  detectNearestObjects
+} from "./Vehicle/DistanceSensing";
 import { createEnvironment } from "./World/Environment";
 
 const appStore = rootStore.applicationStore;

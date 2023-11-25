@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
-import { CarConfig, model3LowRes } from "../Car/Car";
-import { DetectionResult } from "../Car/DetectionResult";
 import { Position } from "../DataModel/Position";
+import { CarConfig, model3LowRes } from "../Vehicle/Car";
+import { DetectionResult } from "../Vehicle/DetectionResult";
 
 export class CarStore {
   speedMS: number = 0;
