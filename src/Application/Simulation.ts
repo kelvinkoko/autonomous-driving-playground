@@ -17,7 +17,7 @@ import { DEFAULT_KEYS_1 } from "./Vehicle/CarControlKeys";
 
 import { observe } from "mobx";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { createTrack } from "./Environment/Track";
+import { createTrack } from "./Simulation/Environment/Track";
 import { createGround } from "./Ground";
 import { createSky } from "./Sky";
 import { InitState, ModelQuality } from "./Store/ApplicationStore";
