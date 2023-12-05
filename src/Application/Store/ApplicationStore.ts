@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 
 export class ApplicationStore {
-  private defaultLogic = `drive = (detectionResult) => {
+  private defaultLogic = `this.drive = (detectionResult) => {
     const diff = detectionResult[1].distance - detectionResult[7].distance;
     const steering = Math.max(-0.7, Math.min(diff, 0.7));
     return {

@@ -10,6 +10,7 @@ import { loadModel } from "../../Utils/Loader";
 import { addVisual, pushVisual } from "../../Utils/Visual";
 import { groundMaterial } from "../World/Ground";
 import { CarControlKeys } from "./CarControlKeys";
+import { DetectionResult } from "./DetectionResult";
 import { detectNearestObjects } from "./DistanceSensing";
 
 export const model3HighRes: CarConfig = {
@@ -63,6 +64,7 @@ export class Car {
     private carStore: CarStore,
     public vehicle: CANNON.RaycastVehicle
   ) {}
+  private drive: ((_: DetectionResult[]) => DriveAction) | undefined;
 
   reset() {
     this.carStore.applyBrake(0);
@@ -88,6 +90,33 @@ export class Car {
     );
     this.carStore.setDetectionResult(result);
   }
+
+  updateVehicle() {
+    const detectionResult = this.carStore.detectionResult;
+    if (!this.carStore.isManualDriving && this.carStore.isAutopilotEnabled) {
+      const action = this.runSelfDrive(detectionResult);
+      this.carStore.applyForce(action.force);
+      this.carStore.applyBrake(action.brake);
+      this.carStore.setSteering(action.steering);
+    }
+  }
+
+  runSelfDrive(detectionResult: DetectionResult[]): DriveAction {
+    if (!this.drive) {
+      return { force: 0, brake: 0, steering: 0 };
+    }
+    return this.drive(detectionResult);
+  }
+
+  applyDriveCode(code: string) {
+    eval(code);
+  }
+}
+
+interface DriveAction {
+  force: number;
+  brake: number;
+  steering: number;
 }
 
 export async function createVehicle(
@@ -108,6 +137,7 @@ export async function createVehicle(
 
   observeStore(carStore, vehicle);
   bindKeyEvent(controlKeys, carStore);
+  carStore.setCarConfig(currentCarModel);
   return new Car(position, carStore, vehicle);
 }
 

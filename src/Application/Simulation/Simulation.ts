@@ -23,14 +23,12 @@ import { InitState, ModelQuality } from "../Store/ApplicationStore";
 import { rootStore } from "../Store/RootStore";
 import { updateVisual } from "../Utils/Visual";
 import { createTrack } from "./Track/Track";
-import { DetectionResult } from "./Vehicle/DetectionResult";
 import { createRayLines } from "./Vehicle/DistanceSensing";
 import { createEnvironment } from "./World/Environment";
 import { createGround } from "./World/Ground";
 import { createSky } from "./World/Sky";
 
 const appStore = rootStore.applicationStore;
-const carStore = rootStore.carStore;
 
 const world = new CANNON.World({
   gravity: new CANNON.Vec3(0, -9.82, 0)
@@ -60,10 +58,7 @@ export async function start(container: HTMLElement) {
 }
 
 export function reset() {
-  if (!car) {
-    return;
-  }
-  car.reset();
+  car?.reset();
 }
 
 function initDriveCode() {
@@ -76,7 +71,7 @@ function initDriveCode() {
 function applyDriveCode(code: string) {
   const appStore = rootStore.applicationStore;
   try {
-    eval(code);
+    car?.applyDriveCode(code);
     appStore.setLog("Drive code deployed!");
     appStore.appendLog("Enable Autopilot to test the logic");
   } catch (error) {
@@ -91,15 +86,16 @@ function applyDriveCode(code: string) {
 
 function waitForModelSelection(scene: THREE.Scene) {
   observe(appStore, "modelQuality", change => {
+    let config = model3LowRes;
     switch (change.newValue) {
       case ModelQuality.LOW:
-        carStore.setCarConfig(model3LowRes);
+        config = model3LowRes;
         break;
       case ModelQuality.HIGH:
-        carStore.setCarConfig(model3HighRes);
+        config = model3HighRes;
         break;
     }
-    loadCar(carStore.carConfig, scene);
+    loadCar(model3LowRes, scene);
   });
 }
 
@@ -114,7 +110,6 @@ async function loadCar(config: CarConfig, scene: THREE.Scene) {
     config
   );
   appStore.setInitState(InitState.READY);
-  carStore.recordStartLapTime();
 }
 
 function animate(
@@ -136,38 +131,12 @@ function animate(
 }
 
 function updateVehicle() {
-  if (!car) {
-    return;
-  }
-  const detectionResult = carStore.detectionResult;
-  if (!carStore.isManualDriving && carStore.isAutopilotEnabled) {
-    const action = runSelfDrive(detectionResult);
-    carStore.applyForce(action.force);
-    carStore.applyBrake(action.brake);
-    carStore.setSteering(action.steering);
-  }
-}
-
-let drive: (_: DetectionResult[]) => DriveAction;
-
-function runSelfDrive(detectionResult: DetectionResult[]): DriveAction {
-  if (!drive) {
-    return { force: 0, brake: 0, steering: 0 };
-  }
-  return drive(detectionResult);
-}
-
-interface DriveAction {
-  force: number;
-  brake: number;
-  steering: number;
+  car?.updateVehicle();
 }
 
 function updatePhysics(scene: THREE.Scene) {
   world.fixedStep();
-  if (car) {
-    car.updatePhysics(scene);
-  }
+  car?.updatePhysics(scene);
 }
 
 function updateCamera(camera: THREE.Camera, controls: OrbitControls) {
