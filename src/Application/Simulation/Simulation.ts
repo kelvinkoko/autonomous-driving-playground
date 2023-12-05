@@ -131,12 +131,12 @@ function animate(
 }
 
 function updateVehicle() {
-  car?.updateVehicle();
+  car?.mayApplySelfDrive();
 }
 
 function updatePhysics(scene: THREE.Scene) {
   world.fixedStep();
-  car?.updatePhysics(scene);
+  car?.updateCarStateAfterPhysicsStep(scene);
 }
 
 function updateCamera(camera: THREE.Camera, controls: OrbitControls) {

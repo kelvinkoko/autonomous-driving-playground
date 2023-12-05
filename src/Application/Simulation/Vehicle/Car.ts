@@ -77,7 +77,7 @@ export class Car {
     this.vehicle.chassisBody.velocity.set(0, 0, 0);
   }
 
-  updatePhysics(scene: THREE.Scene) {
+  updateCarStateAfterPhysicsStep(scene: THREE.Scene) {
     this.carStore.setSpeed(this.vehicle.chassisBody.velocity.length());
     this.carStore.updatePosition(
       this.vehicle.chassisBody.position.x,
@@ -91,7 +91,7 @@ export class Car {
     this.carStore.setDetectionResult(result);
   }
 
-  updateVehicle() {
+  mayApplySelfDrive() {
     const detectionResult = this.carStore.detectionResult;
     if (!this.carStore.isManualDriving && this.carStore.isAutopilotEnabled) {
       const action = this.runSelfDrive(detectionResult);
