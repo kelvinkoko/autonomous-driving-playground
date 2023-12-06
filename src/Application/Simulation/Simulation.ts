@@ -95,7 +95,7 @@ function waitForModelSelection(scene: THREE.Scene) {
         config = model3HighRes;
         break;
     }
-    loadCar(model3LowRes, scene);
+    loadCar(config, scene);
   });
 }
 
