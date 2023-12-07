@@ -63,7 +63,9 @@ export class Car {
     private initPosition: CANNON.Vec3,
     private carStore: CarStore,
     public vehicle: CANNON.RaycastVehicle
-  ) {}
+  ) {
+    this.observeStore(carStore, vehicle);
+  }
   private drive: ((_: DetectionResult[]) => DriveAction) | undefined;
 
   reset() {
@@ -111,6 +113,26 @@ export class Car {
   applyDriveCode(code: string) {
     eval(code);
   }
+
+  observeStore(carStore: CarStore, vehicle: CANNON.RaycastVehicle) {
+    observe(carStore, "steeringRad", change => {
+      vehicle.setSteeringValue(-change.newValue, 0);
+      vehicle.setSteeringValue(-change.newValue, 1);
+    });
+    observe(carStore, "applyingForce", change => {
+      vehicle.applyEngineForce(-change.newValue * MAX_FORCE, 2);
+      vehicle.applyEngineForce(-change.newValue * MAX_FORCE, 3);
+    });
+    observe(carStore, "applyingBrake", change => {
+      vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 0);
+      vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 1);
+      vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 2);
+      vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 3);
+    });
+    observe(carStore, "driveCode", change => {
+      this.applyDriveCode(change.newValue);
+    });
+  }
 }
 
 interface DriveAction {
@@ -135,27 +157,9 @@ export async function createVehicle(
 
   vehicle.addToWorld(world);
 
-  observeStore(carStore, vehicle);
   bindKeyEvent(controlKeys, carStore);
   carStore.setCarConfig(currentCarModel);
   return new Car(position, carStore, vehicle);
-}
-
-function observeStore(carStore: CarStore, vehicle: CANNON.RaycastVehicle) {
-  observe(carStore, "steeringRad", change => {
-    vehicle.setSteeringValue(-change.newValue, 0);
-    vehicle.setSteeringValue(-change.newValue, 1);
-  });
-  observe(carStore, "applyingForce", change => {
-    vehicle.applyEngineForce(-change.newValue * MAX_FORCE, 2);
-    vehicle.applyEngineForce(-change.newValue * MAX_FORCE, 3);
-  });
-  observe(carStore, "applyingBrake", change => {
-    vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 0);
-    vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 1);
-    vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 2);
-    vehicle.setBrake(change.newValue * MAX_BREAK_FORCE, 3);
-  });
 }
 
 function setupChassis(

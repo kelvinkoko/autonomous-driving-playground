@@ -14,6 +14,7 @@ export class CarStore {
   isAutopilotEnabled: boolean = false;
   lapTimeStartMs: number = 0;
   position: Position = { x: 0, y: 0 };
+  driveCode: string = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -62,4 +63,8 @@ export class CarStore {
     this.position.x = x;
     this.position.y = y;
   };
+
+  setDriveCode(code: string) {
+    this.driveCode = code;
+  }
 }

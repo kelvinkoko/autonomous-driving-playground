@@ -54,21 +54,13 @@ export async function start(container: HTMLElement) {
   animate(renderer, scene, camera, controls);
 
   waitForModelSelection(scene);
-  initDriveCode();
 }
 
 export function reset() {
   car?.reset();
 }
 
-function initDriveCode() {
-  applyDriveCode(appStore.editorCode);
-  observe(appStore, "driveCode", change => {
-    applyDriveCode(change.newValue);
-  });
-}
-
-function applyDriveCode(code: string) {
+export function applyDriveCode(code: string) {
   const appStore = rootStore.applicationStore;
   try {
     car?.applyDriveCode(code);
@@ -95,11 +87,11 @@ function waitForModelSelection(scene: THREE.Scene) {
         config = model3HighRes;
         break;
     }
-    loadCar(config, scene);
+    createCar(config, scene);
   });
 }
 
-async function loadCar(config: CarConfig, scene: THREE.Scene) {
+async function createCar(config: CarConfig, scene: THREE.Scene) {
   appStore.setInitState(InitState.LOADING);
   car = await createVehicle(
     initCarPosition,
@@ -109,6 +101,7 @@ async function loadCar(config: CarConfig, scene: THREE.Scene) {
     rootStore.carStore,
     config
   );
+  applyDriveCode(appStore.editorCode);
   appStore.setInitState(InitState.READY);
 }
 

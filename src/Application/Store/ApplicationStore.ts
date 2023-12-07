@@ -14,7 +14,6 @@ export class ApplicationStore {
   initState: InitState = InitState.MODEL_SELECTION;
   modelQuality: ModelQuality | undefined = undefined;
   editorCode: string = this.defaultLogic;
-  driveCode: string = this.defaultLogic;
   log: string = "";
   isShowingCodePane: boolean = false;
   isShowingManualInstruction: boolean = false;
@@ -33,10 +32,6 @@ export class ApplicationStore {
 
   setEditorCode(code: string) {
     this.editorCode = code;
-  }
-
-  setDriveCode(code: string) {
-    this.driveCode = code;
   }
 
   setLog(log: string) {

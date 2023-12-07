@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ENABLE_DEPLOY } from "../../Config/FeatureFlag";
+import { applyDriveCode } from "../../Simulation/Simulation";
 import StoreContext from "../../Store/StoreContext";
 import style from "./DeployButton.css";
 
@@ -7,7 +8,7 @@ const DeployButton = () => {
   const rootStore = React.useContext(StoreContext);
   const appStore = rootStore.applicationStore;
   const deployCode = () => {
-    appStore.setDriveCode(appStore.editorCode);
+    applyDriveCode(appStore.editorCode);
   };
   return (
     <div
