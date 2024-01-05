@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { Tab } from "../Tab";
 
 export class ApplicationStore {
   private defaultLogic = `this.drive = (detectionResult) => {
@@ -14,9 +15,11 @@ export class ApplicationStore {
   initState: InitState = InitState.MODEL_SELECTION;
   modelQuality: ModelQuality | undefined = undefined;
   editorCode: string = this.defaultLogic;
+  wasmModule: any = null;
   log: string = "";
   isShowingCodePane: boolean = false;
   isShowingManualInstruction: boolean = false;
+  codeTab: Tab = Tab.JS;
 
   constructor() {
     makeAutoObservable(this);
@@ -34,6 +37,10 @@ export class ApplicationStore {
     this.editorCode = code;
   }
 
+  setWasmModule(wasmModule: any) {
+    this.wasmModule = wasmModule;
+  }
+
   setLog(log: string) {
     this.log = log;
   }
@@ -48,6 +55,10 @@ export class ApplicationStore {
 
   setIsShowingManualInstruction(value: boolean) {
     this.isShowingManualInstruction = value;
+  }
+
+  setTab(tab: Tab) {
+    this.codeTab = tab;
   }
 }
 

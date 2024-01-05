@@ -6,10 +6,12 @@ import { useEffect, useRef } from "react";
 import style from "./App.css";
 import { onCanvasResize, start } from "./Simulation/Simulation";
 import StoreContext from "./Store/StoreContext";
+import { Tab } from "./Tab";
 import AutopilotControlButton from "./Ui/CodeDev/AutopilotControlButton";
 import CodeEditor from "./Ui/CodeDev/CodeEditor";
 import Console from "./Ui/CodeDev/Console";
 import DeployButton from "./Ui/CodeDev/DeployButton";
+import { Wasm } from "./Ui/CodeDev/Wasm";
 import OverlayUi from "./Ui/OverlayUi";
 
 const App = observer(() => {
@@ -23,6 +25,7 @@ const App = observer(() => {
       start(canvasElement);
     }
   }, []);
+  const activeTab = appStore.codeTab;
   return (
     <Allotment
       className={style.container}
@@ -39,22 +42,58 @@ const App = observer(() => {
         className={style.codePane}
         visible={appStore.isShowingCodePane}
       >
-        <CodePane />
+        <CodePane
+          activeTab={activeTab}
+          setActiveTab={tab => {
+            appStore.setTab(tab);
+          }}
+        />
       </Allotment.Pane>
     </Allotment>
   );
 });
 
-const CodePane = () => {
+interface TabProps {
+  activeTab: Tab;
+  setActiveTab: (tab: Tab) => void;
+}
+
+const CodePane = ({ activeTab, setActiveTab }: TabProps) => {
   return (
     <Allotment vertical defaultSizes={[70, 30]}>
       <Allotment.Pane className={style.editorWithButtonContainer}>
-        <CodeEditor />
+        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div className={style.codeContainer}>
+          {activeTab === Tab.JS ? <CodeEditor /> : <Wasm />}
+        </div>
         <DeployButton />
         <AutopilotControlButton />
       </Allotment.Pane>
       <Console />
     </Allotment>
+  );
+};
+
+const Tabs = ({ activeTab, setActiveTab }: TabProps) => {
+  return (
+    <div className={style.tabContainer}>
+      <div
+        className={`${style.tab} ${
+          activeTab === Tab.JS ? style.tabActive : ""
+        }`}
+        onClick={setActiveTab.bind(this, Tab.JS)}
+      >
+        Javascript
+      </div>
+      <div
+        className={`${style.tab} ${
+          activeTab === Tab.WASM ? style.tabActive : ""
+        }`}
+        onClick={setActiveTab.bind(this, Tab.WASM)}
+      >
+        Web Assembly
+      </div>
+    </div>
   );
 };
 

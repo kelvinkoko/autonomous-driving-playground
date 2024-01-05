@@ -22,7 +22,7 @@
   will-change: width;
 }
 .codePane {
-  background-color: #2d2f3f;
+  background-color: #191a25;
   height: 100%;
   transition: all 0.2s ease-in-out;
   will-change: width;
@@ -35,4 +35,31 @@
 .container:global(.split-view-sash-dragging) .codePane {
   /* disable animation while sash dragging */
   transition: none;
+}
+
+.tabContainer {
+  display: flex;
+}
+
+.tab {
+  color: #9b9ba0;
+  text-align: center;
+  font-weight: 300;
+  font-size: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+.tab:hover {
+  color: #ffffffaa;
+}
+
+.tabActive {
+  background-color: #2d2f3f;
+  color: #fff;
+}
+
+.codeContainer {
+  background-color: #2d2f3f;
+  height: 100%;
+  overflow: scroll;
 }

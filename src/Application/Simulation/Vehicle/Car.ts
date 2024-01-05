@@ -12,6 +12,7 @@ import { groundMaterial } from "../World/Ground";
 import { CarControlKeys } from "./CarControlKeys";
 import { DetectionResult } from "./DetectionResult";
 import { detectNearestObjects } from "./DistanceSensing";
+import { DriveAction } from "./DriveAction";
 
 export const model3HighRes: CarConfig = {
   chassisModel: chassisModelFile,
@@ -133,12 +134,6 @@ export class Car {
       this.applyDriveCode(change.newValue);
     });
   }
-}
-
-interface DriveAction {
-  force: number;
-  brake: number;
-  steering: number;
 }
 
 export async function createVehicle(
