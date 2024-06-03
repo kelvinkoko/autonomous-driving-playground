@@ -19,6 +19,8 @@ import { DEFAULT_KEYS_1 } from "./Vehicle/CarControlKeys";
 
 import { observe } from "mobx";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { pollGamepads } from "../InputControl/Gamepad";
+import { setupGamepad } from "../InputControl/GamepadActionMapping";
 import { InitState, ModelQuality } from "../Store/ApplicationStore";
 import { rootStore } from "../Store/RootStore";
 import { updateVisual } from "../Utils/Visual";
@@ -42,6 +44,7 @@ export async function start(container: HTMLElement) {
   const renderer = setupRenderer(container);
   const controls = setupOrbitControls(camera, renderer);
   setupOnResize(container, renderer, camera);
+  setupGamepad(rootStore.carStore);
 
   createEnvironment(scene, renderer);
   createSky(scene);
@@ -50,7 +53,6 @@ export async function start(container: HTMLElement) {
   if (VisualMode.showSensing) {
     createRayLines(scene);
   }
-
   animate(renderer, scene, camera, controls);
 
   waitForModelSelection(scene);
@@ -114,12 +116,11 @@ function animate(
   requestAnimationFrame(() => {
     animate(renderer, scene, camera, controls);
   });
-
   updatePhysics(scene);
   updateVehicle();
   updateVisual();
   updateCamera(camera, controls);
-
+  pollGamepads();
   renderer.render(scene, camera);
 }
 
